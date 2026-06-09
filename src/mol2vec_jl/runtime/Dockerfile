@@ -24,10 +24,14 @@ RUN pip install --no-cache-dir \
 
 WORKDIR /opt/mol2vec
 
+RUN mkdir -p /opt/mol2vec/examples/models
+ADD https://raw.githubusercontent.com/samoturk/mol2vec/master/examples/models/model_300dim.pkl /opt/mol2vec/examples/models/model_300dim.pkl
+
 COPY . /opt/mol2vec
 
 COPY runtime/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
 
 WORKDIR /workspace
 

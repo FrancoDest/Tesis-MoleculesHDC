@@ -47,7 +47,11 @@ DEFAULT_TEST_SIZE = 0.2
 DEFAULT_RANDOM_STATE = 800
 DEFAULT_JL_DIM = 10048
 DEFAULT_ITERATIONS = 100
-DEFAULT_MOL2VEC_MODEL = "/tesis/mol2vec/examples/models/model_300dim.pkl"
+DEFAULT_MOL2VEC_MODEL = "/opt/mol2vec/examples/models/model_300dim.pkl"
+MOL2VEC_EXAMPLE_MODEL_URL = (
+    "https://raw.githubusercontent.com/samoturk/mol2vec/master/"
+    "examples/models/model_300dim.pkl"
+)
 
 
 def ensure_legacy_word2vec_subscriptable() -> None:
@@ -354,6 +358,13 @@ def ensure_embeddings_exist(
         raise ValueError(
             "Embeddings file is missing and no mol2vec model was provided. "
             "Pass --mol2vec-model explicitly or generate embeddings beforehand."
+        )
+    if not Path(model_path).is_file():
+        raise FileNotFoundError(
+            "No encontre el modelo Mol2vec pretrained en "
+            f"{model_path}. El runtime Docker descarga el ejemplo oficial desde "
+            f"{MOL2VEC_EXAMPLE_MODEL_URL}; si corres fuera de Docker, pasa "
+            "--mol2vec-model con una copia local de model_300dim.pkl."
         )
 
     embeddings_path.parent.mkdir(parents=True, exist_ok=True)

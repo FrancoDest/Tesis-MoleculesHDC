@@ -240,17 +240,49 @@ def summarize_pickle_metrics(path: Path) -> list[dict[str, Any]]:
 
 
 def summarize_csv_artifact(path: Path) -> list[dict[str, Any]]:
+    numeric_columns = {
+        "Accuracy": "average_accuracy",
+        "AUROC": "average_auroc",
+        "Balanced_Accuracy": "average_balanced_accuracy",
+        "F1_Score": "average_f1",
+        "Precision": "average_precision",
+        "Recall": "average_recall",
+        "CPU_Total_Time_Seconds": "average_cpu_total_time_seconds",
+        "Memory_Usage_%": "average_memory_percent",
+        "Memory_MB": "average_memory_mb",
+        "Elapsed_Seconds": "average_elapsed_seconds",
+        "Training_Seconds": "average_training_seconds",
+        "Testing_Seconds": "average_testing_seconds",
+    }
+
     with path.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
         fieldnames = reader.fieldnames or []
-        row_count = sum(1 for _ in reader)
+        totals = {column: 0.0 for column in numeric_columns}
+        counts = {column: 0 for column in numeric_columns}
+        row_count = 0
+        for csv_row in reader:
+            row_count += 1
+            for column in numeric_columns:
+                value = csv_row.get(column)
+                if value in (None, ""):
+                    continue
+                try:
+                    totals[column] += float(value)
+                except ValueError:
+                    continue
+                counts[column] += 1
+    row = {
+        "summary_source": str(path),
+        "summary_format": "csv",
+        "csv_row_count": row_count,
+        "csv_columns": json.dumps(fieldnames, ensure_ascii=False),
+    }
+    for column, output_key in numeric_columns.items():
+        if counts[column]:
+            row[output_key] = totals[column] / counts[column]
     return [
-        {
-            "summary_source": str(path),
-            "summary_format": "csv",
-            "csv_row_count": row_count,
-            "csv_columns": json.dumps(fieldnames, ensure_ascii=False),
-        }
+        row
     ]
 
 
@@ -338,7 +370,17 @@ def collect_summary_rows(
             if resolved_path in seen_files or not resolved_path.is_file():
                 continue
             seen_files.add(resolved_path)
-            for summary_row in summarize_artifact(resolved_path):
+            try:
+                artifact_rows = summarize_artifact(resolved_path)
+            except ModuleNotFoundError as exc:
+                artifact_rows = [
+                    {
+                        "summary_source": str(resolved_path),
+                        "summary_format": resolved_path.suffix.lower().lstrip(".") or "unknown",
+                        "summary_error": f"missing_python_module:{exc.name}",
+                    }
+                ]
+            for summary_row in artifact_rows:
                 merged = dict(base_row)
                 merged.update(summary_row)
                 rows.append(merged)
