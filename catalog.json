@@ -1,0 +1,474 @@
+{
+  "datasets": {
+    "bbbp": {
+      "description": "BBBP binario usado por Random Forest, Mole-BERT, Mol2Vec JL y MoleHD.",
+      "dataset_path": "/tesis/final/data/bbbp/raw/BBBP.csv",
+      "rdkit_valid_csv": "/tesis/final/data/bbbp/raw/BBBP_rdkit_valid.csv",
+      "labels_csv": "/tesis/final/data/bbbp/raw/BBBP.csv",
+      "embeddings_csv": "/run_outputs/artifacts/bbbp_mol2vec_features.csv",
+      "rf_dataset_path": "/tesis/final/data/bbbp/raw/BBBP.csv",
+      "molebert_input_csv": "/tesis/final/data/bbbp/raw/BBBP_rdkit_valid.csv",
+      "molehd_dataset_path": "/repo/final/data/bbbp/raw/BBBP.csv",
+      "graphhd_dataset_path": "/tesis/final/data/bbbp/raw/BBBP.csv",
+      "polymer_gnn_dataset_path": "/tesis/final/data/bbbp/raw/BBBP.csv",
+      "id_column": "num",
+      "target_column": "p_np",
+      "molecule_column": "smiles"
+    },
+    "bace": {
+      "description": "BACE binario estandarizado desde el raw de Mole-BERT, con SMILES en columna unica y target Class.",
+      "dataset_path": "/tesis/final/data/bace/raw/bace_binary.csv",
+      "rdkit_valid_csv": "/tesis/final/data/bace/raw/bace_binary.csv",
+      "labels_csv": "/tesis/final/data/bace/raw/bace_binary.csv",
+      "embeddings_csv": "/run_outputs/artifacts/bace_mol2vec_features.csv",
+      "rf_dataset_path": "/tesis/final/data/bace/raw/bace_binary.csv",
+      "molebert_input_csv": "/tesis/final/data/bace/raw/bace_binary.csv",
+      "molehd_dataset_path": "/repo/final/data/bace/raw/bace_binary.csv",
+      "graphhd_dataset_path": "/tesis/final/data/bace/raw/bace_binary.csv",
+      "polymer_gnn_dataset_path": "/tesis/final/data/bace/raw/bace_binary.csv",
+      "id_column": "id",
+      "target_column": "label",
+      "molecule_column": "smiles"
+    },
+    "clintox": {
+      "description": "ClinTox preparado como tarea binaria unica usando CT_TOX por defecto. Tambien deje FDA_APPROVED en raw/single_task/.",
+      "dataset_path": "/tesis/final/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "rdkit_valid_csv": "/tesis/final/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "labels_csv": "/tesis/final/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "embeddings_csv": "/run_outputs/artifacts/clintox_mol2vec_features.csv",
+      "rf_dataset_path": "/tesis/final/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "molebert_input_csv": "/tesis/final/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "molehd_dataset_path": "/repo/final/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "graphhd_dataset_path": "/tesis/final/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "polymer_gnn_dataset_path": "/tesis/final/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "id_column": "id",
+      "target_column": "label",
+      "molecule_column": "smiles"
+    },
+    "hiv": {
+      "description": "HIV binario estandarizado desde el raw de Mole-BERT, usando HIV_active como target.",
+      "dataset_path": "/tesis/final/data/hiv/raw/hiv_binary.csv",
+      "rdkit_valid_csv": "/tesis/final/data/hiv/raw/hiv_binary.csv",
+      "labels_csv": "/tesis/final/data/hiv/raw/hiv_binary.csv",
+      "embeddings_csv": "/run_outputs/artifacts/hiv_mol2vec_features.csv",
+      "rf_dataset_path": "/tesis/final/data/hiv/raw/hiv_binary.csv",
+      "molebert_input_csv": "/tesis/final/data/hiv/raw/hiv_binary.csv",
+      "molehd_dataset_path": "/repo/final/data/hiv/raw/hiv_binary.csv",
+      "graphhd_dataset_path": "/tesis/final/data/hiv/raw/hiv_binary.csv",
+      "polymer_gnn_dataset_path": "/tesis/final/data/hiv/raw/hiv_binary.csv",
+      "id_column": "id",
+      "target_column": "label",
+      "molecule_column": "smiles"
+    },
+    "mutag": {
+      "description": "MUTAG binario preparado automaticamente desde los archivos raw de Mole-BERT.",
+      "adapter": "mutag_raw_pair_to_csv",
+      "source_smiles_path": "final/data/mutag/raw/mutag_188_data.can",
+      "source_labels_path": "final/data/mutag/raw/mutag_188_target.txt",
+      "target_column": "label",
+      "molecule_column": "smiles",
+      "id_column": "id"
+    },
+    "nci1": {
+      "description": "Proxy tabular con SMILES armado desde NCI60 en DeepChem, fijando una sola tarea binaria para poder correr pipelines tipo BBBP.",
+      "adapter": "deepchem_nci_to_csv",
+      "task_name": "CCRF-CEM",
+      "target_column": "label",
+      "molecule_column": "smiles",
+      "id_column": "id"
+    },
+    "ncl1": {
+      "description": "Alias practico del mismo proxy basado en NCI60/DeepChem, no del benchmark grafico TU NCI1.",
+      "adapter": "deepchem_nci_to_csv",
+      "task_name": "CCRF-CEM",
+      "target_column": "label",
+      "molecule_column": "smiles",
+      "id_column": "id"
+    },
+    "ptc_fm": {
+      "description": "PTC_FM binario reconstruido a SMILES con RDKit desde los archivos raw de TU Dataset.",
+      "adapter": "ptc_fm_raw_to_csv",
+      "source_dir": "final/data/ptc_fm",
+      "target_column": "label",
+      "molecule_column": "smiles",
+      "id_column": "id"
+    },
+    "sider": {
+      "description": "SIDER preparado como tarea binaria unica usando Hepatobiliary disorders por defecto. Tambien deje las 27 tareas en raw/single_task/.",
+      "dataset_path": "/tesis/final/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "rdkit_valid_csv": "/tesis/final/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "labels_csv": "/tesis/final/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "embeddings_csv": "/run_outputs/artifacts/sider_mol2vec_features.csv",
+      "rf_dataset_path": "/tesis/final/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "molebert_input_csv": "/tesis/final/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "molehd_dataset_path": "/repo/final/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "graphhd_dataset_path": "/tesis/final/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "polymer_gnn_dataset_path": "/tesis/final/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "id_column": "id",
+      "target_column": "label",
+      "molecule_column": "smiles"
+    },
+    "tox21": {
+      "description": "Tox21 preparado como tarea binaria unica usando NR-AhR por defecto. Tambien deje las 12 tareas en raw/single_task/.",
+      "dataset_path": "/tesis/final/data/tox21/raw/single_task/nr_ahr_binary.csv",
+      "rdkit_valid_csv": "/tesis/final/data/tox21/raw/single_task/nr_ahr_binary.csv",
+      "labels_csv": "/tesis/final/data/tox21/raw/single_task/nr_ahr_binary.csv",
+      "embeddings_csv": "/run_outputs/artifacts/tox21_mol2vec_features.csv",
+      "rf_dataset_path": "/tesis/final/data/tox21/raw/single_task/nr_ahr_binary.csv",
+      "molebert_input_csv": "/tesis/final/data/tox21/raw/single_task/nr_ahr_binary.csv",
+      "molehd_dataset_path": "/repo/final/data/tox21/raw/single_task/nr_ahr_binary.csv",
+      "graphhd_dataset_path": "/tesis/final/data/tox21/raw/single_task/nr_ahr_binary.csv",
+      "polymer_gnn_dataset_path": "/tesis/final/data/tox21/raw/single_task/nr_ahr_binary.csv",
+      "id_column": "id",
+      "target_column": "label",
+      "molecule_column": "smiles"
+    },
+    "vipea": {
+      "description": "Dataset vipea para el baseline GNN de polimeros.",
+      "csv_path": "/tesis/final/data/vipea/dataset.csv"
+    }
+  },
+  "methods": [
+    {
+      "name": "random_forest_rdkit",
+      "description": "Random Forest con descriptores RDKit sobre datasets binarios tipo BBBP/MUTAG.",
+      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
+      "cwd": "final/src/random_forest_rdkit",
+      "docker": {
+        "image": "general-random-forest-rdkit",
+        "build_context": "final/src/random_forest_rdkit",
+        "dockerfile": "final/src/random_forest_rdkit/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/final/src/random_forest_rdkit",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "--dataset",
+          "{rf_dataset_path}",
+          "--target-column",
+          "{target_column}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--iterations",
+          "10",
+          "--output-dir",
+          "/run_outputs/artifacts"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/metrics.json",
+        "_outputs/artifacts/detailed_results.csv"
+      ]
+    },
+    {
+      "name": "mole_bert_hdc",
+      "description": "Pipeline completo Mole-BERT -> JL -> HDC sobre BBBP.",
+      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
+      "cwd": "final/src/mole_bert_hdc",
+      "docker": {
+        "image": "general-molebert-hdc",
+        "build_context": "final/src/mole_bert_hdc",
+        "dockerfile": "final/src/mole_bert_hdc/hdc_pipeline/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/final/src/mole_bert_hdc",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "python",
+          "hdc_pipeline/run_hdc_pipeline.py",
+          "--input-csv",
+          "{molebert_input_csv}",
+          "--target-column",
+          "{target_column}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--checkpoint",
+          "/tesis/final/src/mole_bert_hdc/original/model_gin/Mole-BERT.pth",
+          "--iterations",
+          "10",
+          "--jl-dim",
+          "10048",
+          "--output-dir",
+          "/run_outputs/artifacts"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/*_hdc_metrics.json",
+        "_outputs/artifacts/*_hdc_test_predictions.csv"
+      ]
+    },
+    {
+      "name": "mol2vec_jl",
+      "description": "Embeddings Mol2Vec + JL + clasificador, usando embeddings prearmados o generados en runtime segun el dataset.",
+      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
+      "cwd": "final/src/mol2vec_jl",
+      "docker": {
+        "image": "general-mol2vec-jl",
+        "build_context": "final/src/mol2vec_jl",
+        "dockerfile": "final/src/mol2vec_jl/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/final/src/mol2vec_jl",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "python",
+          "/tesis/final/src/mol2vec_jl/jl_pipeline/run_bbbp_jl_pipeline.py",
+          "--embeddings-csv",
+          "{embeddings_csv}",
+          "--labels-csv",
+          "{labels_csv}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--target-column",
+          "{target_column}",
+          "--label-id-column",
+          "{id_column}",
+          "--iterations",
+          "10",
+          "--jl-dim",
+          "10048",
+          "--output-dir",
+          "/run_outputs/artifacts",
+          "--random-state",
+          "800"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/*_jl_metrics.json",
+        "_outputs/artifacts/*_jl_test_predictions.csv"
+      ]
+    },
+    {
+      "name": "molehd",
+      "description": "MoleHD clasico sobre BBBP, ejecutado en copia temporal para no contaminar outputs.",
+      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
+      "workspace_copy_from": "final/src/molehd",
+      "cwd_in_workspace": ".",
+      "docker": {
+        "image": "general-molehd",
+        "build_context": "final/src/molehd",
+        "dockerfile": "final/src/molehd/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis",
+        "mounts": [
+          {
+            "source": "{workspace_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{repo_root}",
+            "target": "/repo"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          },
+          {
+            "source": "{repo_root}/Mole-BERT",
+            "target": "/molebert"
+          }
+        ],
+        "run_args": [
+          "python",
+          "/tesis/original/MoleHD.py",
+          "--dataset_file",
+          "{molehd_dataset_path}",
+          "--target",
+          "{target_column}",
+          "--mols",
+          "{molecule_column}",
+          "--num_tokens",
+          "500",
+          "--dim",
+          "10048",
+          "--max_pos",
+          "256",
+          "--gramsize",
+          "3",
+          "--retraining_epochs",
+          "20",
+          "--iterations",
+          "10",
+          "--test_size",
+          "20",
+          "--threshold",
+          "256",
+          "--encoding_scheme",
+          "characterwise",
+          "--split_type",
+          "random_stratified",
+          "--version",
+          "general_run"
+        ]
+      },
+      "summary_patterns": [
+        "_workspace/outputs/metrics_dict_*.p",
+        "_workspace/outputs/detailed_results_*.csv"
+      ]
+    },
+    {
+      "name": "graphHD",
+      "description": "Variante separada de GraphHD basada mas directamente en la carpeta original graph-hd, mantenida aparte para comparar contra la adaptacion actual.",
+      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
+      "cwd": "final/src/graphHD",
+      "docker": {
+        "image": "final-graphhd",
+        "build_context": "final/src/graphHD",
+        "dockerfile": "final/src/graphHD/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/final/src/graphHD",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "python",
+          "/tesis/final/src/graphHD/pipeline/run_graphHD_remaster.py",
+          "--dataset-csv",
+          "{graphhd_dataset_path}",
+          "--target-column",
+          "{target_column}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--id-column",
+          "{id_column}",
+          "--iterations",
+          "10",
+          "--dim",
+          "10048",
+          "--output-dir",
+          "/run_outputs/artifacts",
+          "--random-state",
+          "800"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/*_graphhd_metrics.json",
+        "_outputs/artifacts/*_graphhd_detailed_results.csv",
+        "_outputs/artifacts/*_graphhd_best_iteration_predictions.csv"
+      ]
+    },
+    {
+      "name": "polymer_gnn",
+      "description": "Baseline GNN repetido sobre vipea usando PyTorch Geometric.",
+      "datasets": ["vipea"],
+      "cwd": "final/src/polymer_gnn",
+      "docker": {
+        "image": "general-polymer-gnn",
+        "build_context": "final/src/polymer_gnn",
+        "dockerfile": "final/src/polymer_gnn/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/final/src/polymer_gnn",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "python",
+          "original/run_gnn.py",
+          "--task",
+          "vipea",
+          "--csv-path",
+          "{csv_path}",
+          "--iterations",
+          "10",
+          "--output-dir",
+          "/run_outputs/artifacts"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/vipea_polymer_gnn_metrics.json",
+        "_outputs/artifacts/vipea_polymer_gnn_detailed_results.csv"
+      ]
+    },
+    {
+      "name": "polymer_gnn_bbbp",
+      "aliases": ["polymer_gnn"],
+      "description": "La misma arquitectura GNN del repo polymer-gnn-classification, adaptada a datasets binarios tipo BBBP/MUTAG.",
+      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
+      "cwd": "final/src/polymer_gnn",
+      "docker": {
+        "image": "general-polymer-gnn",
+        "build_context": "final/src/polymer_gnn",
+        "dockerfile": "final/src/polymer_gnn/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/final/src/polymer_gnn",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "python",
+          "original/run_gnn.py",
+          "--task",
+          "binary",
+          "--dataset-csv",
+          "{polymer_gnn_dataset_path}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--target-column",
+          "{target_column}",
+          "--id-column",
+          "{id_column}",
+          "--batch-size",
+          "128",
+          "--early-stopping-patience",
+          "5",
+          "--min-epochs",
+          "8",
+          "--iterations",
+          "10",
+          "--output-dir",
+          "/run_outputs/artifacts"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/*_polymer_gnn_metrics.json",
+        "_outputs/artifacts/*_polymer_gnn_detailed_results.csv",
+        "_outputs/artifacts/*_polymer_gnn_best_iteration_predictions.csv"
+      ]
+    }
+  ]
+}
