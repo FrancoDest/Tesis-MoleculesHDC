@@ -8,6 +8,7 @@ import pickle
 import re
 import shutil
 import subprocess
+import traceback
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +19,7 @@ from catalog_config import (
     join_command,
     list_options,
     load_catalog,
+    make_run_id,
     prepare_isolated_env,
     resolve_python,
     select_methods,
@@ -58,7 +60,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dataset",
         default=DEFAULT_DATASET,
-        help=f"Dataset a usar segun el catalogo. Default: {DEFAULT_DATASET}.",
+        help=f"Dataset a usar segun el catalogo, o 'all' para correr todos secuencialmente. Default: {DEFAULT_DATASET}.",
     )
     parser.add_argument(
         "--method",
@@ -524,6 +526,29 @@ def cleanup_run_directory(execution: dict) -> None:
         shutil.rmtree(workspace_root, ignore_errors=True)
 
 
+def resolve_requested_datasets(catalog: dict[str, Any], dataset_arg: str) -> list[str]:
+    if dataset_arg == "all":
+        return list(catalog["datasets"].keys())
+
+    if dataset_arg not in catalog["datasets"]:
+        raise SystemExit(f"Dataset desconocido: {dataset_arg}")
+    return [dataset_arg]
+
+
+def build_failed_summary_row(method_name: str, dataset_name: str, error: Exception) -> dict[str, Any]:
+    return {
+        "method_name": method_name,
+        "dataset_name": dataset_name,
+        "run_id": make_run_id(),
+        "status": "failed",
+        "exit_code": None,
+        "cwd": "",
+        "command": "",
+        "run_log": "",
+        "summary_error": f"{type(error).__name__}: {error}",
+    }
+
+
 def main() -> int:
     args = parse_args()
     _ = resolve_python(args.python)
@@ -536,35 +561,39 @@ def main() -> int:
     results_dir = args.results_dir.resolve()
     results_dir.mkdir(parents=True, exist_ok=True)
 
-    dataset_name = args.dataset
-    dataset_config = catalog["datasets"].get(dataset_name)
-    if dataset_config is None:
-        raise SystemExit(f"Dataset desconocido: {dataset_name}")
-
-    methods = select_methods(catalog, dataset_name, args.method)
-    methods, skipped_methods = filter_methods_inside_final(methods)
-
-    print(f"Dataset: {dataset_name}")
-    print(f"Metodos a correr: {', '.join(method['name'] for method in methods)}")
-    for method_name, missing_path in skipped_methods:
-        print(f"[skip] {method_name}: no existe {missing_path}")
-
     exit_code = 0
-    for method_config in methods:
+    for dataset_name in resolve_requested_datasets(catalog, args.dataset):
+        dataset_config = catalog["datasets"][dataset_name]
+        methods = select_methods(catalog, dataset_name, args.method)
+        methods, skipped_methods = filter_methods_inside_final(methods)
+
         print()
-        print(f"=== Ejecutando {method_config['name']} sobre {dataset_name} ===")
-        summary_rows = run_method(
-            method_config=method_config,
-            dataset_name=dataset_name,
-            dataset_config=dataset_config,
-            results_dir=results_dir,
-            rebuild=args.rebuild,
-            dry_run=args.dry_run,
-        )
-        method_slug = method_config["name"]
-        append_rows(results_dir / method_slug / "summary.csv", summary_rows)
-        if any(row.get("status") == "failed" for row in summary_rows):
-            exit_code = 1
+        print(f"Dataset: {dataset_name}")
+        print(f"Metodos a correr: {', '.join(method['name'] for method in methods)}")
+        for method_name, missing_path in skipped_methods:
+            print(f"[skip] {method_name}: no existe {missing_path}")
+
+        for method_config in methods:
+            print()
+            print(f"=== Ejecutando {method_config['name']} sobre {dataset_name} ===")
+            try:
+                summary_rows = run_method(
+                    method_config=method_config,
+                    dataset_name=dataset_name,
+                    dataset_config=dataset_config,
+                    results_dir=results_dir,
+                    rebuild=args.rebuild,
+                    dry_run=args.dry_run,
+                )
+            except Exception as exc:
+                print(f"[error] {method_config['name']} sobre {dataset_name}: {exc}")
+                print(traceback.format_exc())
+                summary_rows = [build_failed_summary_row(method_config["name"], dataset_name, exc)]
+
+            method_slug = method_config["name"]
+            append_rows(results_dir / method_slug / "summary.csv", summary_rows)
+            if any(row.get("status") == "failed" for row in summary_rows):
+                exit_code = 1
 
     update_global_index(results_dir)
     return exit_code
