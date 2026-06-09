@@ -212,7 +212,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--labels-csv",
-        default="/tesis/final/data/bbbp/raw/BBBP.csv",
+        default="/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP.csv",
         help="CSV original BBBP con la columna target.",
     )
     parser.add_argument(

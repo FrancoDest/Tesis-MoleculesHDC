@@ -35,8 +35,8 @@ except ImportError:  # pragma: no cover
     psutil = None
 
 
-DEFAULT_BINARY_DATASET_CSV = Path("/tesis/final/data/bbbp/raw/BBBP.csv")
-DEFAULT_VIPEA_CSV = Path("/tesis/final/data/vipea/dataset.csv")
+DEFAULT_BINARY_DATASET_CSV = Path("/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP.csv")
+DEFAULT_VIPEA_CSV = Path("/tesis/Tesis-PolymerHDC/data/vipea/dataset.csv")
 DEFAULT_BATCH_SIZE = 64
 DEFAULT_HIDDEN_CHANNELS = 64
 DEFAULT_NUM_LAYERS = 4

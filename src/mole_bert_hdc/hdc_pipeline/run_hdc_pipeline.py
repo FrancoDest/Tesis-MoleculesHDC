@@ -48,7 +48,7 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help=(
             "CSV base del dataset. Para BBBP conviene usar "
-            "'/tesis/final/data/bbbp/raw/BBBP_rdkit_valid.csv'."
+            "'/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP_rdkit_valid.csv'."
         ),
     )
     parser.add_argument("--target-column", required=True, help="Columna target binaria.")
