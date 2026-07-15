@@ -365,8 +365,9 @@ def _build_binary_dataset_context(
 
 def _prepare_nci_csv_with_docker(outputs_dir: Path, task_name: str | None) -> None:
     image_name = "final-nci-dataset-prep"
-    dockerfile = REPO_ROOT / "final" / "nci_dataset_prep_docker" / "Dockerfile"
-    build_context = (REPO_ROOT / "final").resolve()
+    docker_build_root = (REPO_ROOT / "Tesis-PolymerHDC" / "nci_dataset_prep_docker").resolve()
+    dockerfile = docker_build_root / "Dockerfile"
+    build_context = docker_build_root
     prepared_dir = outputs_dir / "prepared_dataset"
     prepared_dir.mkdir(parents=True, exist_ok=True)
 

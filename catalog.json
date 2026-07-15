@@ -123,9 +123,15 @@
       "target_column": "label",
       "molecule_column": "smiles"
     },
-    "vipea": {
-      "description": "Dataset vipea para el baseline GNN de polimeros.",
-      "csv_path": "/tesis/Tesis-PolymerHDC/data/vipea/dataset.csv"
+    "vipea_ea": {
+      "description": "Dataset vipea (copolimeros) binarizado por mediana de afinidad electronica (EA).",
+      "csv_path": "/tesis/Tesis-PolymerHDC/data/vipea/dataset.csv",
+      "target_property": "EA"
+    },
+    "vipea_ip": {
+      "description": "Dataset vipea (copolimeros) binarizado por mediana de potencial de ionizacion (IP).",
+      "csv_path": "/tesis/Tesis-PolymerHDC/data/vipea/dataset.csv",
+      "target_property": "IP"
     }
   },
   "methods": [
@@ -380,8 +386,8 @@
     },
     {
       "name": "polymer_gnn",
-      "description": "Baseline GNN repetido sobre vipea usando PyTorch Geometric.",
-      "datasets": ["vipea"],
+      "description": "Baseline GNN repetido sobre VIPEA (EA/IP binarizados por mediana) usando PyTorch Geometric.",
+      "datasets": ["vipea_ea", "vipea_ip"],
       "cwd": "Tesis-PolymerHDC/src/polymer_gnn",
       "docker": {
         "image": "general-polymer-gnn",
@@ -406,6 +412,8 @@
           "vipea",
           "--csv-path",
           "{csv_path}",
+          "--target-property",
+          "{target_property}",
           "--iterations",
           "100",
           "--output-dir",
@@ -413,8 +421,8 @@
         ]
       },
       "summary_patterns": [
-        "_outputs/artifacts/vipea_polymer_gnn_metrics.json",
-        "_outputs/artifacts/vipea_polymer_gnn_detailed_results.csv"
+        "_outputs/artifacts/vipea_*_polymer_gnn_metrics.json",
+        "_outputs/artifacts/vipea_*_polymer_gnn_detailed_results.csv"
       ]
     },
     {

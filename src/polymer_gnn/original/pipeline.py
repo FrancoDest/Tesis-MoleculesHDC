@@ -52,8 +52,7 @@ DEFAULT_EARLY_STOPPING_PATIENCE = 5
 DEFAULT_MIN_EPOCHS = 8
 DEFAULT_MIN_DELTA = 1e-4
 
-LABEL_TO_INDEX = {"alternating": 0, "block": 1, "random": 2}
-INDEX_TO_LABEL = {value: key for key, value in LABEL_TO_INDEX.items()}
+VIPEA_TARGET_COLUMNS = {"EA": "EA (eV)", "IP": "IP (eV)"}
 HYBRIDIZATION_TO_INDEX = {
     Chem.rdchem.HybridizationType.SP: 0,
     Chem.rdchem.HybridizationType.SP2: 1,
@@ -80,6 +79,8 @@ class PolymerRecord:
     frac_b: float
     mono_a: str
     mono_b: str
+    ea: float
+    ip: float
 
 
 class PolymerGNN(nn.Module):
@@ -122,6 +123,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--task", choices=("binary", "vipea"), required=True)
     parser.add_argument("--dataset-csv", type=Path, default=DEFAULT_BINARY_DATASET_CSV)
     parser.add_argument("--csv-path", type=Path, default=DEFAULT_VIPEA_CSV)
+    parser.add_argument(
+        "--target-property",
+        choices=("EA", "IP"),
+        default="EA",
+        help="Propiedad de VIPEA a predecir (task=vipea), binarizada por su mediana.",
+    )
     parser.add_argument("--smiles-column", default="smiles")
     parser.add_argument("--target-column", default="p_np")
     parser.add_argument("--id-column", default="num")
@@ -202,6 +209,8 @@ def load_polymer_records(csv_path: Path, max_samples: int | None = None) -> list
                     frac_b=float(row["fracB"]),
                     mono_a=row["monoA"].strip(),
                     mono_b=row["monoB"].strip(),
+                    ea=float(row["EA (eV)"]),
+                    ip=float(row["IP (eV)"]),
                 )
             )
             if max_samples is not None and len(records) >= max_samples:
@@ -272,7 +281,7 @@ def mol_to_fragment(mol: Chem.Mol, unit_tag: float) -> tuple[list[list[float]], 
     return x, edge_index, edge_attr, anchor_idx
 
 
-def build_polymer_graph(record: PolymerRecord) -> Data:
+def build_polymer_graph(record: PolymerRecord, target_property: str, threshold: float) -> Data:
     count_a, count_b = parse_comp(record.comp)
     sequence = make_sequence(record, count_a, count_b)
     mol_a = Chem.MolFromSmiles(record.mono_a)
@@ -304,16 +313,19 @@ def build_polymer_graph(record: PolymerRecord) -> Data:
         edge_features.append(virtual_edge)
 
     global_features = torch.tensor([[record.frac_a, record.frac_b, abs(record.frac_a - record.frac_b)]], dtype=torch.float)
+    target_value = record.ea if target_property == "EA" else record.ip
+    label = 1 if target_value > threshold else 0
     data = Data(
         x=torch.tensor(node_features, dtype=torch.float),
         edge_index=torch.tensor(edge_pairs, dtype=torch.long).t().contiguous(),
         edge_attr=torch.tensor(edge_features, dtype=torch.float),
-        y=torch.tensor([LABEL_TO_INDEX[record.poly_type]], dtype=torch.long),
+        y=torch.tensor([label], dtype=torch.long),
         u=global_features,
     )
     data.poly_id = record.poly_id
     data.poly_type_name = record.poly_type
     data.comp = record.comp
+    data.target_value = target_value
     return data
 
 
@@ -341,8 +353,11 @@ def split_grouped(
     return train_graphs, val_graphs, test_graphs
 
 
-def load_polymer_graphs(csv_path: Path, max_samples: int | None = None) -> list[Data]:
-    return [build_polymer_graph(record) for record in load_polymer_records(csv_path, max_samples=max_samples)]
+def load_polymer_graphs(csv_path: Path, target_property: str, max_samples: int | None = None) -> list[Data]:
+    records = load_polymer_records(csv_path, max_samples=max_samples)
+    values = [record.ea if target_property == "EA" else record.ip for record in records]
+    threshold = float(np.median(values))
+    return [build_polymer_graph(record, target_property, threshold) for record in records]
 
 
 def build_binary_graphs(dataset_csv: Path, smiles_column: str, target_column: str, id_column: str) -> tuple[list[Data], int]:
@@ -473,27 +488,6 @@ def binary_metrics_from_scores(y_true: np.ndarray, y_score: np.ndarray) -> dict[
     }
 
 
-def vipea_metrics_from_scores(y_true: np.ndarray, y_score: np.ndarray) -> dict[str, object]:
-    y_pred = y_score.argmax(axis=1)
-    metrics = {
-        "accuracy": float(accuracy_score(y_true, y_pred)),
-        "balanced_accuracy": float(balanced_accuracy_score(y_true, y_pred)),
-        "f1_macro": float(f1_score(y_true, y_pred, average="macro", zero_division=0)),
-        "precision_macro": float(precision_score(y_true, y_pred, average="macro", zero_division=0)),
-        "recall_macro": float(recall_score(y_true, y_pred, average="macro", zero_division=0)),
-        "confusion_matrix": confusion_matrix(y_true, y_pred, labels=sorted(INDEX_TO_LABEL)).tolist(),
-        "per_class_accuracy": {
-            INDEX_TO_LABEL[idx]: float(((y_pred == idx) & (y_true == idx)).sum() / max((y_true == idx).sum(), 1))
-            for idx in INDEX_TO_LABEL
-        },
-    }
-    try:
-        metrics["roc_auc_ovr_macro"] = float(roc_auc_score(y_true, y_score, multi_class="ovr", average="macro"))
-    except ValueError:
-        metrics["roc_auc_ovr_macro"] = None
-    return metrics
-
-
 def average_confusion_matrix(confusion_matrices: list[list[list[int]]]) -> list[list[float]]:
     return np.asarray(confusion_matrices, dtype=np.float64).mean(axis=0).tolist()
 
@@ -536,10 +530,12 @@ def run_vipea(args: argparse.Namespace) -> None:
     csv_path = args.csv_path
     if not csv_path.exists():
         raise FileNotFoundError(f"Dataset not found: {csv_path}")
+    target_property = args.target_property
+    property_stem = target_property.lower()
 
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
-    graphs = load_polymer_graphs(csv_path, max_samples=args.max_samples)
+    graphs = load_polymer_graphs(csv_path, target_property=target_property, max_samples=args.max_samples)
     if not graphs:
         raise RuntimeError("No se pudieron cargar grafos para el baseline GNN.")
 
@@ -554,6 +550,7 @@ def run_vipea(args: argparse.Namespace) -> None:
     worst_test_auroc = float("inf")
 
     print(f"Loaded {len(graphs)} graphs")
+    print(f"Target property: {target_property} (binarizada por mediana)")
     print(f"Iteraciones: {args.iterations}")
     print(f"Epochs por iteracion: {args.epochs}")
 
@@ -567,7 +564,7 @@ def run_vipea(args: argparse.Namespace) -> None:
         train_loader = DataLoader(train_graphs, batch_size=args.batch_size, shuffle=True)
         val_loader = DataLoader(val_graphs, batch_size=args.batch_size)
         test_loader = DataLoader(test_graphs, batch_size=args.batch_size)
-        model = build_model(sample, args, num_classes=len(INDEX_TO_LABEL)).to(device)
+        model = build_model(sample, args, num_classes=2).to(device)
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
         best_state = None
@@ -575,7 +572,7 @@ def run_vipea(args: argparse.Namespace) -> None:
         start_time = time.time()
         for _epoch in range(1, args.epochs + 1):
             train_one_epoch(model, train_loader, optimizer, device)
-            val_metrics = vipea_metrics_from_scores(*collect_scores(model, val_loader, device))
+            val_metrics = binary_metrics_from_scores(*collect_scores(model, val_loader, device))
             if val_metrics["accuracy"] > best_val:
                 best_val = val_metrics["accuracy"]
                 best_state = {key: value.cpu() for key, value in model.state_dict().items()}
@@ -584,7 +581,7 @@ def run_vipea(args: argparse.Namespace) -> None:
             raise RuntimeError("Training did not produce a checkpoint")
 
         model.load_state_dict(best_state)
-        test_metrics = vipea_metrics_from_scores(*collect_scores(model, test_loader, device))
+        test_metrics = binary_metrics_from_scores(*collect_scores(model, test_loader, device))
         elapsed_seconds = float(time.time() - start_time)
         confusion_matrices.append(test_metrics["confusion_matrix"])
         row = {
@@ -595,17 +592,17 @@ def run_vipea(args: argparse.Namespace) -> None:
             "Test_Size": len(test_graphs),
             "Best_Val_Accuracy": float(best_val),
             "Accuracy": test_metrics["accuracy"],
-            "AUROC_OVR_Macro": test_metrics["roc_auc_ovr_macro"],
+            "AUROC": test_metrics["roc_auc"],
             "Balanced_Accuracy": test_metrics["balanced_accuracy"],
-            "F1_Macro": test_metrics["f1_macro"],
-            "Precision_Macro": test_metrics["precision_macro"],
-            "Recall_Macro": test_metrics["recall_macro"],
+            "F1": test_metrics["f1"],
+            "Precision": test_metrics["precision"],
+            "Recall": test_metrics["recall"],
             "Confusion_Matrix": json.dumps(test_metrics["confusion_matrix"], ensure_ascii=False),
             "Elapsed_Seconds": elapsed_seconds,
         }
         rows.append(row)
 
-        current_auroc = float("-inf") if test_metrics["roc_auc_ovr_macro"] is None else float(test_metrics["roc_auc_ovr_macro"])
+        current_auroc = float(test_metrics["roc_auc"])
         if current_auroc > best_test_auroc:
             best_test_auroc = current_auroc
             best_row = row
@@ -614,17 +611,18 @@ def run_vipea(args: argparse.Namespace) -> None:
             worst_row = row
 
     metrics = {
-        "pipeline": "polymer_gnn_vipea",
+        "pipeline": f"polymer_gnn_vipea_{property_stem}",
         "dataset_path": str(csv_path),
+        "target_property": target_property,
         "iterations": args.iterations,
         "epochs": args.epochs,
         "average_metrics": {
             "Accuracy": float(np.mean([row["Accuracy"] for row in rows])),
-            "AUROC_OVR_Macro": None if all(row["AUROC_OVR_Macro"] is None for row in rows) else float(np.mean([row["AUROC_OVR_Macro"] for row in rows if row["AUROC_OVR_Macro"] is not None])),
+            "AUROC": float(np.mean([row["AUROC"] for row in rows])),
             "Balanced_Accuracy": float(np.mean([row["Balanced_Accuracy"] for row in rows])),
-            "F1_Macro": float(np.mean([row["F1_Macro"] for row in rows])),
-            "Precision_Macro": float(np.mean([row["Precision_Macro"] for row in rows])),
-            "Recall_Macro": float(np.mean([row["Recall_Macro"] for row in rows])),
+            "F1": float(np.mean([row["F1"] for row in rows])),
+            "Precision": float(np.mean([row["Precision"] for row in rows])),
+            "Recall": float(np.mean([row["Recall"] for row in rows])),
             "Confusion_Matrix": average_confusion_matrix(confusion_matrices),
             "Elapsed_Seconds": float(np.mean([row["Elapsed_Seconds"] for row in rows])),
         },
@@ -632,8 +630,8 @@ def run_vipea(args: argparse.Namespace) -> None:
         "worst_iteration": worst_row,
         "timing_summary": {"total_wall_clock_seconds": float(time.time() - overall_start)},
     }
-    write_json(output_dir / "vipea_polymer_gnn_metrics.json", metrics)
-    write_csv(output_dir / "vipea_polymer_gnn_detailed_results.csv", rows)
+    write_json(output_dir / f"vipea_{property_stem}_polymer_gnn_metrics.json", metrics)
+    write_csv(output_dir / f"vipea_{property_stem}_polymer_gnn_detailed_results.csv", rows)
 
 
 def run_binary(args: argparse.Namespace) -> None:
