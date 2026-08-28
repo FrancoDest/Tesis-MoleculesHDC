@@ -1,0 +1,1002 @@
+S.1. Database (227 polymers),,,,
+,,,,
+ID,Polymer,Refractive Index,Reference,SMILES
+1,Poly(hexafluoropropylene oxide),1.3010,Jabeen [14],C(C(O)(F)F)(C(F)(F)F)F
+2,poly(pentadecafluorooctyl acrylate),1.3390,Duchowicz [13],C(C(=O)OCC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F)C
+3,"poly[2,2,3,3-tetrafluoro-3-(heptafluoropropoxy)propyl acrylate]",1.3460,Duchowicz [13],C(C(=O)OCC(F)(F)C(F)(F)OC(F)(F)C(F)(F)C(F)(F)F)C
+4,"poly[2,2,3,3-tetrafluoro-3-(pentafluoroethoxy)propyl acrylate]",1.3480,Duchowicz [13],C(C(=O)OCC(F)(F)C(F)(F)OC(F)(F)C(F)(F)F)C
+5,Polytetrafluoroethylene,1.3500,Jabeen [14],C(F)(F)C(F)(F)
+6,poly(undecafluorohexyl acrylate),1.3560,Duchowicz [13],C(C(=O)OCC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F)C
+7,poly(nonafluoropentyl acrylate),1.3600,Duchowicz [13],C(C(=O)OCC(F)(F)C(F)(F)C(F)(F)C(F)(F)F)C
+8,"poly[2,2,3,3-tetrafluoro-3-(trifluoromethoxy)propyl acrylate]",1.3600,Duchowicz [13],C(C(=O)OCC(F)(F)C(F)(F)OC(F)(F)F)C
+9,poly(vinyl pentafluoropropionate),1.3640,Duchowicz [13],C(OC(=O)C(F)(F)C(F)(F)F)C
+10,poly(heptafluorobutyl acrylate),1.3670,Duchowicz [13],C(C(=O)OCC(F)(F)C(F)(F)C(F)(F)F)C
+11,Poly(trifluorovinyl acetate),1.3750,Jabeen [14],CC(OC(=O)C(F)(F)F)
+12,"poly(2,2,3,3,4,4,5,5-octafluoropentyl acrylate)",1.3800,Duchowicz [13],C(C(=O)OCC(F)(F)C(F)(F)C(F)(F)C(F)F)C
+13,"poly{oxy[(3,3,3-trifluoropropyl)(methyl)silanediyl]}",1.3830,Duchowicz [13],O[Si](C)(CCC(F)(F)F)
+14,Poly(pentafluoropropyl acrylate),1.3850,Jabeen [14],CC(C(=O)OCC(F)(F)C(F)(F)(F))
+15,poly(chlorotrifluoroethylene),1.3900,Duchowicz [13],C(F)(F)C(Cl)(F)
+16,"poly[2-(2,2,3,3,4,4,4-heptafluorobutoxy)ethyl acrylate]",1.3900,Duchowicz [13],C(C(=O)OCCOCC(F)(F)C(F)(F)C(F)(F)F)C
+17,"poly(2,2,3,4,4,4-hexafluorobutyl acrylate)",1.3920,Duchowicz [13],C(C(=O)OCC(F)(F)C(F)C(F)(F)F)C
+18,poly(methylsiloxane),1.3970,Duchowicz [13],O[SiH](C)
+19,Poly(dimenthyl siloxane),1.4035,Jabeen [14],O[Si](C)(C)
+20,Poly(trifluoroethyl acrylate),1.4070,Jabeen [14],C(C(=O)OCC(F)(F)F)C
+21,"poly[2-(1,1,2,2-tetrafluoroethoxy)ethyl acrylate]",1.4120,Duchowicz [13],C(C(=O)OCCOC(F)(F)C(F)F)C
+22,"Poly(2,2,2-trifluoro-1-methylethyl methacrylate)",1.4185,Jabeen [14],C(C)(C(=O)OC(C)C(F)(F)F)C
+23,poly[2-(trifluoroethoxy)ethyl acrylate],1.4190,Duchowicz [13],C(C(=O)OCCOCC(F)(F)F)C
+24,Poly(vinylidene fluoride),1.4200,Jabeen [14],CC(F)(F)
+25,Poly[oxy(methyl n-hexylsilylene)],1.4330,Jabeen [14],O[Si](C)(CCCCCC)
+26,Poly(trifluoroethyl methacrylate),1.4370,Jabeen [14],C(C)(C(=O)OCC(F)(F)F)C
+27,Poly[oxy(methyl n-octadecylsilylene)],1.4430,Jabeen [14],O[Si](C)(CCCCCCCCCCCCCCCCCC)
+28,poly(methyl hexyl siloxane),1.4430,Duchowicz [13],O[Si](C)(CCCCCC)
+29,Poly[oxy(methyl n-octylsilylene)],1.4450,Jabeen [14],O[Si](C)(CCCCCCCC)
+30,Poly(vinyl isobutyl ether),1.4507,Jabeen [14],CCOCC(C)C
+31,Poly[oxy(methyl n-hexadecylsilylene)],1.4510,Jabeen [14],O[Si](C)(CCCCCCCCCCCCCCCC)
+32,Poly(vinyl ethyl ether),1.4540,Jabeen [14],CCOCC
+33,Poly[oxy(methyl n-tetradecylsilylene)],1.4550,Jabeen [14],O[Si](C)(CCCCCCCCCCCCCC)
+34,Poly(oxyethylene),1.4563,Jabeen [14],OCC
+35,poly(vinyl n-butyl ether),1.4563,Duchowicz [13],CC(OCCCC)
+36,Poly(propylene oxide),1.4570,Jabeen [14],CC(C)O
+37,Poly(3-butoxylpropylene oxide),1.4580,Jabeen [14],CC(COCCCC)O
+38,Poly(vinyl n-pentyl ether),1.4590,Jabeen [14],C(OCCCCC)C
+39,Poly(3-hexoxylpropylene oxide),1.4590,Jabeen [14],CC(COCCCCCC)O
+40,Poly(vinyl hexyl ether),1.4591,Jabeen [14],CC(OCCCCCC)
+41,Poly(4-fluoro-2-trifluoromethylstyrene),1.4600,Jabeen [14],CC(c1c(cc(F)cc1)C(F)(F)F)
+42,Poly(vinyl n-octyl ether),1.4613,Jabeen [14],CC(OCCCCCCCC)
+43,Poly(vinyl 2-ethylhexyl ether),1.4626,Jabeen [14],C(OCC(CCCC)CC)C
+44,Poly(vinyl n-decyl ether),1.4628,Jabeen [14],C(OCCCCCCCCCC)C
+45,Poly(2-methoxyethyl acrylate),1.4630,Jabeen [14],CC(C(=O)OCCOC)
+46,poly(3-methoxypropylene oxide),1.4630,Duchowicz [13],CC(COC)O
+47,poly(oxyhydroxy-3-methacryloyloxypropylsilylene),1.4630,Duchowicz [13],O[Si](CCCOC(=O)C(=C)C)
+48,Poly(tert-butyl methacrylate),1.4638,Jabeen [14],CC(C)(C(OC(C)(C)C)=O)
+49,poly (vinyl n-dodecyl ether),1.4640,Duchowicz [13],CC(OCCCCCCCCCCCC)
+50,Poly(4-methyl-1-pentene),1.4650,Jabeen [14],C(CC(C)C)C
+51,Poly(3-ethoxypropyl acrylate),1.4650,Jabeen [14],CC(C(=O)OCCCOCC)
+52,Poly(n-butyl acrylate),1.4660,Jabeen [14],CC(C(OCCCC)=O)
+53,Poly(vinyl propionate),1.4665,Jabeen [14],CC(OC(=O)CC)
+54,Poly(vinyl methyl ether),1.4670,Jabeen [14],CC(OC)
+55,Poly(vinyl acetate),1.4670,Jabeen [14],CC(OC(=O)C)
+56,Poly(ethyl acrylate),1.4685,Jabeen [14],CC(C(OCC)=O)
+57,poly(oxyoctamethylene),1.4690,Duchowicz [13],OCCCCCCCC
+58,Poly(3-methoxypropyl acrylate),1.4710,Jabeen [14],CC(C(=O)OCCCOC)
+59,Poly(2-ethoxyethyl acrylate),1.4710,Jabeen [14],CCOCCOC(=O)CC
+60,poly(1-octadecene),1.4710,Duchowicz [13],CC(CCCCCCCCCCCCCCCC)
+61,Poly(isopropyl methacrylate),1.4728,Jabeen [14],CC(C(=O)OC(C)C)(C)
+62,Poly(1-decene),1.4730,Jabeen [14],CC(CCCCCCCC)
+63,Poly(propylene) (atactic),1.4735,Jabeen [14],CC(C)
+64,Poly(vinyl sec-butyl ether) (isotactic),1.4740,Jabeen [14],CC(OC(C)(CC))
+65,Poly(dodecyl methacrylate),1.4740,Jabeen [14],CC(C)(C(OCCCCCCCCCCCC)=O)
+66,Poly(ethylene succinate),1.4744,Jabeen [14],OCCOC(=O)CCC(=O)
+67,Poly(tetradecyl acrylate),1.4746,Jabeen [14],CCCCCCCCCCCCCCOC(=O)CC
+68,poly(tetradecyl methacrylate),1.4746,Duchowicz [13],C(C)(C(=O)OCCCCCCCCCCCCCC)C
+69,poly(hexadecyl methacrylate),1.4750,Duchowicz [13],C(C)(C(=O)OCCCCCCCCCCCCCCCC)C
+70,Poly(vinyl formate),1.4757,Jabeen [14],CC(OC=O)
+71,Poly(ethylene),1.4760,Jabeen [14],CC
+72,Poly(2-fluoroethyl methacrylate),1.4768,Jabeen [14],CC(C(=O)OCCF)(C)
+73,Poly(isobutyl methacrylate),1.4770,Jabeen [14],CC(C(OCC(C)C)=O)(C)
+74,Poly(methyl acrylate),1.4790,Jabeen [14],CC(C(OC)=O)
+75,Ethylcellulose,1.4790,Duchowicz [13],C1OC(COCC)C(C(C1OCC)OCC)O
+76,Poly(oxymethylene),1.4800,Jabeen [14],CO
+77,poly(sec-butyl methacrylate),1.4800,Duchowicz [13],C(C)(C(=O)OC(CC)C)C
+78,Poly(n-hexyl methacrylate),1.4813,Jabeen [14],CC(C(OCCCCCC)=O)(C)
+79,Poly(n-butyl methacrylate),1.4830,Jabeen [14],CC(C(OCCCC)=O)(C)
+80,poly(ethylene dimethacrylate),1.4831,Duchowicz [13],CC(=C)C(=O)OCCOC(=O)C(=C)C
+81,Poly(2-ethoxyethyl methacrylate),1.4833,Jabeen [14],CCOCCOC(=O)C(C)C
+82,Poly(n-propyl methacrylate),1.4840,Jabeen [14],CC(C(OCCC)=O)(C)
+83,poly(ethylene maleate),1.4840,Duchowicz [13],OC(=O)C=CC(=O)OCC
+84,Poly(ethyl methacrylate),1.4850,Jabeen [14],CC(C)(C(OCC)=O)
+85,"Poly(3,3,5-trimethylcyclohexyl methacrylate)",1.4850,Jabeen [14],CC(C(=O)OC1CC(CC(C1)C)(C)C)(C)
+86,Poly(vinyl butyral),1.4850,Jabeen [14],C1OC(CCC)OC(C1)C
+87,Poly(2-nitro-2methylpropyl methacrylate),1.4868,Jabeen [14],C(C)(C(=O)OCC(C)(C)N(=O)=O)C
+88,"Poly(1,1-diethylpropyl methacrylate)",1.4889,Jabeen [14],CC(C)(C(=O)OC(CC)(CC)CC)
+89,Poly(methyl methacrylate),1.4893,Jabeen [14],CC(C)(C(OC)=O)
+90,"Poly(2-decyl-1,4-butadiene)",1.4899,Jabeen [14],CC=C(CCCCCCCCCC)C
+91,poly(ethylglycolate methacrylate),1.4903,Duchowicz [13],C(C)(C(=O)OCC(=O)OCC)C
+92,Poly(3-methylcyclohexyl methacrylate),1.4947,Jabeen [14],C(C)(C(=O)OC1CC(CCC1)C)C
+93,poly(cyclohexyl alpha-ethoxyacrylate),1.4969,Duchowicz [13],C(OCC)(C(=O)OC1CCCCC1)C
+94,Methylcellulose,1.4970,Duchowicz [13],C1OC(COC)C(C(C1OC)OC)O
+95,Poly(4-methylcyclohexyl methacrylate),1.4975,Jabeen [14],C(C)(C(=O)OC1CCC(CC1)C)C
+96,Poly(vinyl methyl ketone),1.5000,Jabeen [14],C(C(=O)C)C
+97,Poly(sec-butyl ?-chloroacrylate),1.5000,Jabeen [14],C(Cl)(C(=O)OC(CC)C)C
+98,"Poly(1,2-butadiene)",1.5000,Jabeen [14],CC(C=C)
+99,Poly(vinyl alcohol),1.5000,Jabeen [14],CC(O)
+100,Poly(2-bromo-4-trifluoromethyl styrene),1.5000,Jabeen [14],CCC1=C(C=C(C=C1)C(F)(F)F)Br
+101,"Poly(2-heptyl-1,4-butadiene)",1.5000,Duchowicz [13],CC(CCCCCCC)=CC
+102,Poly(ethyl ?-chloroacrylate),1.5020,Jabeen [14],C(Cl)(C(=O)OCC)C
+103,"poly(2-isopropyl-1,4-butadiene)",1.5020,Duchowicz [13],CC(C(C)C)=CC
+104,Poly(2-methylcyclohexyl methacrylate),1.5028,Jabeen [14],C(C)(C(=O)OC1C(CCCC1)C)C
+105,"Poly(1,1-dimethylethylene)",1.5050,Jabeen [14],C(C)(C)C
+106,poly(bornyl methacrylate),1.5059,Duchowicz [13],C(C)(C(=O)OC1C2(CCC(C1)C2(C)C)C)C
+107,"poly(2-t-butyl-1,4-butadiene)",1.5060,Duchowicz [13],CC(C(C)(C)C)=CC
+108,poly(ethylene glycol) dimethacrylate,1.5063,Duchowicz [13],CC(=C)C(=O)OCCOC(=O)C(=C)C
+109,Poly(cyclohexyl methacrylate),1.5066,Jabeen [14],CC(C(OC1CCCCC1)=O)(C)
+110,"poly(cyclohexanediol-1,4-dimethylacrylate)",1.5067,Duchowicz [13],O=C(OC1CCC(CC1)OC(=O)C(C)=C)C(C)=C
+111,Poly(tetrahydrofurfuryl methacrylate),1.5096,Jabeen [14],CC(C)(C(=O)OC(c1cccO1))
+112,Poly(1-methylcyclohexyl methacrylate),1.5111,Jabeen [14],C(C)(C(=O)OC1(CCCCC1)C)C
+113,Poly(2-hydroxyethyl methacrylate),1.5119,Jabeen [14],C(C)(C(=O)OCCO)C
+114,poly(ethylethylene),1.5125,Duchowicz [13],CC(CC)
+115,poly(vinyl methacrylate),1.5129,Duchowicz [13],C(C)(C(=O)OC=C)C
+116,Poly(vinyl chloroacetate),1.5130,Jabeen [14],CC(OC(=O)CCl)
+117,Poly(N-butyl methacrylamide),1.5135,Jabeen [14],C(C)(C(=O)NCCCC)C
+118,"poly(1,4-butadiene) (cis)",1.5160,Duchowicz [13],C/C=C\C
+119,Poly(methyl ?-chloroacrylate),1.5170,Jabeen [14],C(Cl)(C(=O)OC)C
+120,Poly(2-chloroethyl methacrylate),1.5170,Jabeen [14],C(C)(C(=O)OCCCl)C
+121,poly[2-(diethylamino)ethyl methacrylate],1.5174,Duchowicz [13],C(C)(C(=O)OCCN(CC)CC)C
+122,poly(2-chlorocyclohexyl methacrylate),1.5179,Duchowicz [13],C(C)(C(=O)OC1C(CCCC1)Cl)C
+123,Poly(allyl methacrylate),1.5196,Jabeen [14],CC(C)C(=O)OCC=C
+124,Polyacrylonitrile,1.5200,Jabeen [14],CC(C#N)
+125,poly(methacrylonitrile),1.5200,Duchowicz [13],CC(C#N)(C)
+126,poly(methyl isopropenyl ketone),1.5200,Duchowicz [13],C(C)(C(=O)C)C
+127,Polyisoprene,1.5210,Jabeen [14],CC(C)=CC
+128,poly[N-(2-methoxyethyl)methacrylamide],1.5246,Duchowicz [13],C(C)(C(=O)NCCOC)C
+129,"trans-1,4-poly-2,3-dimethylbutadiene",1.5250,Duchowicz [13],CC(C)=C(C)C
+130,Poly(acrylic acid),1.5270,Jabeen [14],C(C(O)=O)C
+131,"Poly(1,3-dichloropropyl methacrylate)",1.5270,Jabeen [14],C(C)(C(=O)OC(CCCl)Cl)C
+132,poly[2-chloro-1-(chloromethyl)ethyl methacrylate],1.5270,Duchowicz [13],C(C)(C(=O)OC(CCl)CCl)C
+133,poly(acrolein),1.5290,Duchowicz [13],C(C=O)C
+134,Poly(N-vinylpyrrolidone),1.5300,Jabeen [14],CC(N1CCCC1=O)
+135,poly[isobutene-alt-(N-methylmaleimide)],1.5300,Duchowicz [13],CN1C(=O)CC(C(C)(C)C)C1=O
+136,poly[imino(1-oxohexamethylene)],1.5300,Duchowicz [13],NC(=O)CCCCC
+137,Poly(cyclohexyl ?-chloroacrylate),1.5320,Jabeen [14],C(Cl)(C(=O)OC1CCCCC1)C
+138,Poly[oxy(methylphenylsilylene)],1.5330,Jabeen [14],O[Si](C)(c1ccccc1)
+139,Poly(2-chloroethyl ?-chloroacrylate),1.5330,Jabeen [14],C(Cl)(C(=O)OCCCl)C
+140,Poly(2-aminoethyl methacrylate),1.5370,Jabeen [14],CC(C)C(=O)OCCN
+141,poly(furfuryl methacrylate),1.5381,Duchowicz [13],C(C)(C(=O)OCc1occc1)C
+142,Poly(vinyl chloride),1.5390,Jabeen [14],CC(Cl)
+143,poly(1-phenylamyl methacrylate),1.5396,Duchowicz [13],C(C)(C(=O)OC(CCCC)c1ccccc1)C
+144,poly(N-methylmethacrylamide),1.5398,Duchowicz [13],C(C)(C(=O)NC)C
+145,cellulose,1.5400,Duchowicz [13],C1OC(CO)C(C(C1O)O)O
+146,Poly(sec-butyl ?-bromoacrylate),1.5420,Jabeen [14],C(Br)(C(=O)OC(CC)C)C
+147,Poly(cyclohexyl ?-bromoacrylate),1.5420,Jabeen [14],C(Br)(C(=O)OC1CCCCC1)C
+148,Poly(2-bromoethyl methacrylate),1.5426,Jabeen [14],C(C)(C(=O)OCCBr)C
+149,Poly(2-bromoethyl ethacrylate),1.5426,Jabeen [14],C(CC)(C(=O)OCCBr)C
+150,Poly(ethylmercaptyl methacrylate),1.5470,Jabeen [14],CC(C)(C(OSCC)=O)
+151,poly(N-allyl methacrylamide),1.5476,Duchowicz [13],C(C)(C(=O)NCC=C)C
+152,Poly(1-phenylethyl methacrylate),1.5487,Jabeen [14],C(C)(C(=O)OC(c1ccccc1)C)C
+153,poly(vinyl furan),1.5500,Duchowicz [13],C(c1occc1)C
+154,poly(2-vinyltetrahydrofuran),1.5500,Duchowicz [13],C(C1OCCC1)C
+155,poly(isopropyl methylacrylate),1.5520,Duchowicz [13],CC(C)(C(OC(C)C)=O)
+156,poly(p-methoxybenzyl methacrylate),1.5520,Duchowicz [13],C(C)(C(=O)OCc1ccc(cc1)OC)C
+157,Poly(p-isopropyl styrene),1.5540,Jabeen [14],C(C)c1ccc(cc1)C(C)C
+158,poly(1-phenylallyl methacrylate),1.5573,Duchowicz [13],C(C)(C(=O)OC(c1ccccc1)C=C)C
+159,poly(p-cyclohexylphenyl methacrylate),1.5575,Duchowicz [13],C(C)(C(=O)Oc1ccc(cc1)C1CCCCC1)C
+160,Polychloroprene,1.5580,Jabeen [14],CC=C(Cl)C
+161,poly(2-phenylethyl methacrylate),1.5592,Duchowicz [13],C(C)(C(=O)OCCc1ccccc1)C
+162,"poly(4,4-heptane bis[4-phenyl] carbonate)",1.5602,Duchowicz [13],C1=CC=C(C=C1)C(CCC)(CCC)C1=CC=C(C=C1)OC(=O)O
+163,poly[1-(o-chlorophenyl)ethyl methacrylate],1.5624,Duchowicz [13],C(C)(C(=O)OC(c1c(cccc1)Cl)C)C
+164,poly[styrene-alt-(maleic anhydride)],1.5640,Duchowicz [13],C1C(=O)OC(=O)C1C(c1ccccc1)C
+165,poly(1-phenylcyclohexyl methacrylate),1.5645,Duchowicz [13],C(C)(C(=O)OC1(CCCCC1)c1ccccc1)C
+166,"poly(2,2,4-trimethylhexamethylene terephthalamide)",1.5660,Duchowicz [13],NC(=O)c1ccc(cc1)C(=O)NCC(C)(C)CC(C)CC
+167,"poly(oxycarbonyloxy-1,4-phenylene-1,3-dimethylbutylidene-1,4-phenylene)",1.5671,Duchowicz [13],c1ccc(cc1)C(CC(C)C)(C)c1ccc(cc1)OC(=O)O
+168,Poly(methyl ?-bromoacrylate),1.5672,Jabeen [14],C(Br)(C(=O)OC)C
+169,Poly(benzyl methacrylate),1.5679,Jabeen [14],C(C)(C(=O)OCc1ccccc1)C
+170,poly[2-(phenylsulfonyl)ethyl methacrylate],1.5682,Duchowicz [13],C(C)(C(=O)OCCS(=O)(=O)c1ccccc1)C
+171,Poly(m-cresyl methacrylate),1.5683,Jabeen [14],C(C)(C(=O)Oc1cc(ccc1)C)C
+172,"poly[1,1-(2-methylpropane) bis(4-phenyl)carbonate]",1.5702,Duchowicz [13],c1ccc(cc1)C(C(C)C)c1ccc(cc1)OC(=O)O
+173,poly(o-methoxyphenyl methacrylate),1.5705,Duchowicz [13],C(C)(C(=O)Oc1c(cccc1)OC)C
+174,Poly(phenyl methacrylate),1.5706,Jabeen [14],CC(C)(C(Oc1ccccc1)=O)
+175,poly(o-cresyl methacrylate),1.5707,Duchowicz [13],C(C)(C(=O)Oc1c(cccc1)C)C
+176,poly(Diallyl phthalate),1.5720,Duchowicz [13],CC(COC(=O)C1=CC=CC=C1C(=O)OCC=C)
+177,"Poly(2,3-dibromopropyl methacrylate)",1.5739,Jabeen [14],C(C)(C(=O)OCC(CBr)Br)C
+178,"poly(2,2-pentane bis[4-phenyl] carbonate)",1.5745,Duchowicz [13],c1ccc(cc1)C(CCC)(C)c1ccc(cc1)OC(=O)O
+179,Poly(ethylene terephthalate),1.5750,Jabeen [14],OC(=O)c1ccc(cc1)C(=O)OCC
+180,"poly[oxy(2,6-dimethyl-1,4-phenylene)]",1.5750,Duchowicz [13],Oc1c(C)cc(cc1C)
+181,Poly(vinyl benzoate),1.5775,Jabeen [14],C(OC(=O)c1ccccc1)C
+182,"poly{2,2-propane bis[4-(2-methylphenyl)] carbonate}",1.5783,Duchowicz [13],C1=CC=C(C(C)=C1)C(C)(C)C1=CC=C(C=C1(C))OC(=O)O
+183,"poly(1,1-butane bis[4-phenyl] carbonate)",1.5792,Duchowicz [13],C1=CC=C(C=C1)C(CCC)C1=CC=C(C=C1)OC(=O)O
+184,"poly(1,2-diphenylethyl methacrylate)",1.5816,Duchowicz [13],C(C)(C(=O)OC(c1ccccc1)Cc1ccccc1)C
+185,Poly(o-chlorobenzyl methacrylate),1.5823,Jabeen [14],C(C)(C(=O)OCc1c(cccc1)Cl)C
+186,"poly[2,2-butane bis(4-phenyl)carbonate]",1.5827,Duchowicz [13],c1ccc(cc1)C(C)(CC)c1ccc(cc1)OC(=O)O
+187,Poly(m-nitrobenzyl methacrylate),1.5845,Jabeen [14],C(C)(C(=O)OCc1cc(ccc1)N(=O)(=O))C
+188,poly(bisphenol A carbonate),1.5850,Duchowicz [13],Oc1ccc(cc1)C(C)(C)c1ccc(cc1)OC(=O)
+189,poly[N-(2-phenylethyl)methacrylamide],1.5857,Duchowicz [13],C(C)(C(=O)NCCc1ccccc1)C
+190,"poly[4,4'-(3,3',5,5'-tetrachloro)cyclohexylidenediphenylene carbonate]",1.5858,Duchowicz [13],c1c(Cl)cc(cc1Cl)C1(CCCCC1)c1cc(Cl)c(c(c1)Cl)OC(=O)O
+191,poly(4-methoxy-2-methyl styrene),1.5868,Duchowicz [13],C(C)c1c(cc(cc1)OC)C
+192,Poly(2-methylstyrene),1.5874,Jabeen [14],CC(c2ccccc2C)
+193,"poly(1,1-cyclohexane bis[4-phenyl] carbonate)",1.5900,Duchowicz [13],c1ccc(cc1)C1(CCCCC1)c1ccc(cc1)OC(=O)O
+194,"poly{2,2-propane bis[4-(2-chlorophenyl)] carbonate}",1.5900,Duchowicz [13],C1=CC=C(C(Cl)=C1)C(C)(C)C1=C(Cl)C=C(C=C1)OC(=O)O
+195,Polystyrene,1.5920,Jabeen [14],CC(c2ccccc2)
+196,Poly(o-methoxy styrene),1.5932,Jabeen [14],CC(c2ccccc2OC)
+197,poly(diphenylmethyl methacrylate),1.5933,Duchowicz [13],C(C)(C(=O)OC(c1ccccc1)c1ccccc1)C
+198,"poly[1,1-ethane bis(4-phenyl)carbonate]",1.5937,Duchowicz [13],c1ccc(cc1)C(C)c1ccc(cc1)OC(=O)O
+199,poly(propylene sulfide),1.5960,Duchowicz [13],CC(C)S
+200,Poly(p-bromophenyl methacrylate),1.5964,Jabeen [14],C(C)(C(=O)Oc1ccc(cc1)Br)C
+201,Poly(N-benzyl methacrylamide),1.5965,Jabeen [14],C(C)(C(=O)NCc1ccccc1)C
+202,Poly(p-methoxy styrene),1.5967,Jabeen [14],CC(c1ccc(OC)cc1)
+203,"Poly[1,1-cyclopentane bis(4-phenyl) carbonate]",1.5993,Duchowicz [13],c1ccc(cc1)C1(CCCC1)c1ccc(cc1)OC(=O)O
+204,"poly(1,1-dichloroethylene)",1.6000,Duchowicz [13],CC(Cl)(Cl)
+205,poly[bis(o-chlorodiphenyl)methyl methacrylate],1.6040,Duchowicz [13],C(C)(C(=O)OC(c1c(cccc1)Cl)c1c(cccc1)Cl)C
+206,"poly[2,2-propane bis{4-(2,6-dichlorophenyl)}carbonate]",1.6056,Duchowicz [13],C1=C(Cl)C=C(C=C1(Cl))C(C)(C)C1=CC(Cl)=C(C(Cl)=C1)OC(=O)O
+207,Poly(pentachlorophenyl methacrylate),1.6080,Jabeen [14],C(C)(C(=O)Oc1c(c(c(c(c1Cl)Cl)Cl)Cl)Cl)C
+208,Poly(o-chloro styrene),1.6098,Jabeen [14],CC(c2ccccc2Cl)
+209,Poly(phenyl ?-bromoacrylate),1.6120,Jabeen [14],C(Br)(C(=O)Oc1ccccc1)C
+210,"poly(1,1-[1-phenyl ethane] bis[4-phenyl] carbonate)",1.6130,Duchowicz [13],c1ccc(cc1)C(Cc1ccccc1)c1ccc(cc1)OC(=O)O
+211,"poly{2,2-propane bis[4-(2,6-dibromophenyl)]carbonate}",1.6147,Duchowicz [13],C1=C(Br)C=C(C=C1(Br))C(C)(C)C1=CC(Br)=C(C(Br)=C1)OC(=O)O
+212,poly(p-divinylbenzene),1.6150,Duchowicz [13],C(c1ccc(cc1)C=C)C
+213,Poly(N-vinyl phthalimide),1.6200,Jabeen [14],C(N1C(=O)c2c(C1=O)cccc2)C
+214,"Poly(2,6-dichlorostyrene)",1.6248,Jabeen [14],C(c1c(cccc1Cl)Cl)C
+215,Poly(chloro-p-xylylene),1.6290,Jabeen [14],Cc1ccc(cc1Cl)C
+216,Poly(?-naphthyl methacrylate),1.6298,Jabeen [14],C(C)(C(=O)Oc1cc2c(cc1)cccc2)C
+217,poly(alpha-naphthylmethyl methacrylate),1.6300,Duchowicz [13],C(C)(C(=O)OCc1c2c(ccc1)cccc2)C
+218,poly(sulfone),1.6330,Duchowicz [13],c1ccc(cc1)S(=O)(=O)c1ccc(cc1)Oc1ccc(cc1)C(C)(C)c1ccc(cc1)O
+219,Poly(2-vinylthiophene),1.6376,Jabeen [14],C(c1sccc1)C
+220,"Poly[oxy(2,6-diphenyl-1,4-phenylene)]",1.6400,Jabeen [14],Oc1c(cccc1c1ccccc1)c1ccccc1
+221,Poly(?-naphthyl methacrylate),1.6410,Jabeen [14],C(C)(C(=O)Oc1c2c(ccc1)cccc2)C
+222,poly[diphenylmethane bis(4-phenyl)carbonate],1.6539,Duchowicz [13],c1ccc(cc1)C(c1ccccc1)(c1ccccc1)c1ccc(cc1)OC(=O)O
+223,poly(vinyl phenyl sulfide),1.6568,Duchowicz [13],C(Sc1ccc(cc1))C
+224,Poly(p-xylylene),1.6690,Jabeen [14],Cc1ccc(cc1)C
+225,Poly(?-vinyle naphthalene),1.6818,Jabeen [14],CC(c2c1ccccc1ccc2)
+226,Poly(N-vinyl carbazole),1.6830,Jabeen [14],CC(N2c1c(c3c2cccc3)cccc1)
+227,poly(pentabromophenyl methacrylate),1.7100,Duchowicz [13],C(C)(C(=O)Oc1c(c(c(c(c1Br)Br)Br)Br)Br)C
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
