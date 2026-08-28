@@ -1,44 +1,14 @@
 from __future__ import annotations
 
 import csv
-import math
-import os
+import re
 import shutil
-import subprocess
-from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 from catalog_config import REPO_ROOT, make_run_id, normalize_name, render_template
-
-
-PTC_FM_NODE_LABEL_TO_SYMBOL = {
-    0: "In",
-    1: "P",
-    2: "C",
-    3: "O",
-    4: "N",
-    5: "Cl",
-    6: "S",
-    7: "Br",
-    8: "Na",
-    9: "F",
-    10: "As",
-    11: "K",
-    12: "Cu",
-    13: "I",
-    14: "Ba",
-    15: "Sn",
-    16: "Pb",
-    17: "Ca",
-}
-
-PTC_FM_EDGE_LABEL_TO_BOND = {
-    0: "TRIPLE",
-    1: "SINGLE",
-    2: "DOUBLE",
-    3: "AROMATIC",
-}
 
 
 def prepare_dataset_context(
@@ -48,20 +18,52 @@ def prepare_dataset_context(
 ) -> dict[str, str]:
     adapter = dataset_config.get("adapter")
     if not adapter:
-        return {
+        context = {
             key: str(value)
             for key, value in dataset_config.items()
             if not isinstance(value, dict)
         }
+        context.setdefault("graph_dataset_path", "")
+        return _with_optional_feature_defaults(context)
 
-    if adapter == "mutag_raw_pair_to_csv":
-        return _prepare_mutag_csv(dataset_name, dataset_config, outputs_dir)
-    if adapter == "deepchem_nci_to_csv":
-        return _prepare_deepchem_nci_csv(dataset_name, dataset_config, outputs_dir)
-    if adapter == "ptc_fm_raw_to_csv":
-        return _prepare_ptc_fm_csv(dataset_name, dataset_config, outputs_dir)
+    if adapter == "tu_dataset_graph":
+        context = _prepare_tu_graph_npz(dataset_name, dataset_config, outputs_dir)
+    elif adapter == "refractive_index_binarize":
+        context = _prepare_refractive_index_csv(dataset_name, dataset_config, outputs_dir)
+    elif adapter == "glass_transition_mol_to_csv":
+        context = _prepare_glass_transition_csv(dataset_name, dataset_config, outputs_dir)
+    else:
+        raise ValueError(f"Adapter de dataset no soportado para '{dataset_name}': {adapter}")
 
-    raise ValueError(f"Adapter de dataset no soportado para '{dataset_name}': {adapter}")
+    return _with_optional_feature_defaults(context)
+
+
+#  n_jobs es por (metodo, dataset), no solo por dataset: distintos pipelines
+# tienen distinta heuristica automatica y distinto perfil de memoria sobre el
+# mismo dataset (ej. mole_bert_hdc con JL a 10048d es mucho mas sensible a
+# RAM que mole_bert_rf, que no proyecta). Cada metodo referencia su propia
+# clave {n_jobs_<metodo>} en su run_args; se lista aca para poder rellenar
+# "0" (= heuristica automatica del pipeline) por defecto en todos los
+# datasets que no la pisen explicitamente.
+_N_JOBS_OVERRIDE_KEYS = (
+    "n_jobs_mole_bert_hdc",
+    "n_jobs_mol2vec_jl",
+)
+
+
+def _with_optional_feature_defaults(context: dict[str, str]) -> dict[str, str]:
+    """Los run_args de los pipelines SMILES referencian
+    {frac_a_column}/{frac_b_column}/{group_column} incondicionalmente (el
+    mismo run_args sirve para todos los datasets del metodo). Datasets que no
+    definen estas columnas (bbbp, hiv, etc.) necesitan que el placeholder
+    resuelva igual a "" en vez de tirar KeyError en el .format(); los
+    pipelines tratan "" como "no pasado" (falsy) y no suman la feature."""
+    context.setdefault("frac_a_column", "")
+    context.setdefault("frac_b_column", "")
+    context.setdefault("group_column", "")
+    for key in _N_JOBS_OVERRIDE_KEYS:
+        context.setdefault(key, "0")
+    return context
 
 
 def resolve_execution_context(
@@ -123,42 +125,73 @@ def resolve_execution_context(
     }
 
 
-def _prepare_mutag_csv(
+def _prepare_tu_graph_npz(
     dataset_name: str,
     dataset_config: dict[str, Any],
     outputs_dir: Path,
 ) -> dict[str, str]:
-    smiles_path = (REPO_ROOT / str(dataset_config["source_smiles_path"])).resolve()
-    labels_path = (REPO_ROOT / str(dataset_config["source_labels_path"])).resolve()
-    if not smiles_path.exists():
-        raise FileNotFoundError(f"No existe archivo de smiles para {dataset_name}: {smiles_path}")
-    if not labels_path.exists():
-        raise FileNotFoundError(f"No existe archivo de labels para {dataset_name}: {labels_path}")
+    """Datasets grafo-originales (benchmarks TU Dataset: MUTAG, PTC_FM, NCI1):
+    nunca pasan por SMILES/RDKit. Se leen los archivos crudos TU (`_A.txt`,
+    `_graph_indicator.txt`, `_graph_labels.txt`, `_node_labels.txt`, y
+    `_edge_labels.txt` si el dataset lo trae) y se repaquetan tal cual -- sin
+    reconstruir ninguna molecula, sin tablas de mapeo atomo/enlace, sin
+    perdida -- en un unico .npz que graphHD/polymer_gnn consumen directo."""
+    source_dir = (REPO_ROOT / str(dataset_config["source_dir"])).resolve()
+    if not source_dir.exists():
+        raise FileNotFoundError(f"No existe la carpeta raw de {dataset_name}: {source_dir}")
 
-    smiles_lines = [line.strip() for line in smiles_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    label_lines = [line.strip() for line in labels_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    if len(smiles_lines) != len(label_lines):
+    graph_label_files = sorted(source_dir.glob("*_graph_labels.txt"))
+    if not graph_label_files:
+        raise FileNotFoundError(f"No encontre *_graph_labels.txt en {source_dir}")
+    prefix = graph_label_files[0].name[: -len("_graph_labels.txt")]
+
+    def _tu_path(suffix: str) -> Path:
+        return source_dir / f"{prefix}_{suffix}"
+
+    graph_indicator = _read_int_lines(_tu_path("graph_indicator.txt"))
+    node_labels = _read_int_lines(_tu_path("node_labels.txt"))
+    graph_labels = _read_int_lines(_tu_path("graph_labels.txt"))
+    adjacency_pairs = _read_edge_pairs(_tu_path("A.txt"))
+
+    edge_labels_path = _tu_path("edge_labels.txt")
+    edge_labels = _read_int_lines(edge_labels_path) if edge_labels_path.exists() else None
+
+    if len(graph_indicator) != len(node_labels):
         raise ValueError(
-            f"MUTAG inconsistente: {len(smiles_lines)} smiles y {len(label_lines)} labels."
+            f"{dataset_name} inconsistente: graph_indicator y node_labels no tienen el mismo largo."
         )
+    if edge_labels is not None and len(edge_labels) != len(adjacency_pairs):
+        raise ValueError(
+            f"{dataset_name} inconsistente: A.txt y edge_labels.txt no tienen el mismo largo."
+        )
+
+    # TU Dataset es 1-indexado (nodos y grafos); se pasa todo a 0-indexado aca
+    # para que quien consuma el .npz no tenga que pensar en el offset.
+    graph_indicator_zero = np.asarray(graph_indicator, dtype=np.int64) - 1
+    node_labels_array = np.asarray(node_labels, dtype=np.int64)
+    graph_labels_array = np.asarray(
+        [_normalize_binary_label(value) for value in graph_labels], dtype=np.int64
+    )
+    if adjacency_pairs:
+        edge_index = np.asarray(
+            [[left - 1, right - 1] for left, right in adjacency_pairs], dtype=np.int64
+        ).T
+    else:
+        edge_index = np.empty((2, 0), dtype=np.int64)
 
     prepared_dir = outputs_dir / "prepared_dataset"
     prepared_dir.mkdir(parents=True, exist_ok=True)
-    prepared_csv = prepared_dir / "MUTAG.csv"
+    prepared_npz = prepared_dir / f"{dataset_name}_graph.npz"
 
-    with prepared_csv.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["id", "smiles", "label"])
-        writer.writeheader()
-        for index, (smiles_line, label_line) in enumerate(zip(smiles_lines, label_lines)):
-            smiles = smiles_line.split()[0]
-            label_value = int(label_line)
-            writer.writerow(
-                {
-                    "id": str(index),
-                    "smiles": smiles,
-                    "label": 1 if label_value > 0 else 0,
-                }
-            )
+    savez_kwargs: dict[str, np.ndarray] = {
+        "edge_index": edge_index,
+        "node_labels": node_labels_array,
+        "graph_indicator": graph_indicator_zero,
+        "graph_labels": graph_labels_array,
+    }
+    if edge_labels is not None:
+        savez_kwargs["edge_labels"] = np.asarray(edge_labels, dtype=np.int64)
+    np.savez(prepared_npz, **savez_kwargs)
 
     context = {
         key: str(value)
@@ -167,167 +200,209 @@ def _prepare_mutag_csv(
     }
     context.update(
         {
-            "dataset_path": "/run_outputs/prepared_dataset/MUTAG.csv",
-            "embeddings_csv": "/run_outputs/artifacts/mutag_mol2vec_features.csv",
-            "rdkit_valid_csv": "/run_outputs/prepared_dataset/MUTAG.csv",
-            "labels_csv": "/run_outputs/prepared_dataset/MUTAG.csv",
-            "prepared_dataset_csv": "/run_outputs/prepared_dataset/MUTAG.csv",
-            "rf_dataset_path": "/run_outputs/prepared_dataset/MUTAG.csv",
-            "molebert_input_csv": "/run_outputs/prepared_dataset/MUTAG.csv",
-            "molehd_dataset_path": "/run_outputs/prepared_dataset/MUTAG.csv",
-            "graphhd_dataset_path": "/run_outputs/prepared_dataset/MUTAG.csv",
-            "polymer_gnn_dataset_path": "/run_outputs/prepared_dataset/MUTAG.csv",
+            # Ningun pipeline SMILES corre sobre datasets grafo-originales:
+            # estas keys quedan vacias a proposito.
+            "dataset_path": "",
+            "embeddings_csv": "",
+            "rdkit_valid_csv": "",
+            "labels_csv": "",
+            "prepared_dataset_csv": "",
+            "rf_dataset_path": "",
+            "molebert_input_csv": "",
+            "molehd_dataset_path": "",
+            "graphhd_dataset_path": "",
+            "polymer_gnn_dataset_path": "",
+            "graph_dataset_path": f"/run_outputs/prepared_dataset/{prepared_npz.name}",
         }
     )
     return context
 
 
-def _prepare_deepchem_nci_csv(
+def _median(values: list[float]) -> float:
+    ordered = sorted(values)
+    mid = len(ordered) // 2
+    if len(ordered) % 2 == 1:
+        return ordered[mid]
+    return (ordered[mid - 1] + ordered[mid]) / 2
+
+
+def _prepare_refractive_index_csv(
     dataset_name: str,
     dataset_config: dict[str, Any],
     outputs_dir: Path,
 ) -> dict[str, str]:
-    task_name = dataset_config.get("task_name")
-    try:
-        from deepchem.molnet import load_nci  # type: ignore
-    except ImportError:
-        try:
-            from deepchem.molnet import load_nci1 as load_nci  # type: ignore
-        except ImportError:
-            _prepare_nci_csv_with_docker(outputs_dir, task_name=task_name)
-            return _build_binary_dataset_context(
-                dataset_name=dataset_name,
-                dataset_config=dataset_config,
-                prepared_csv=outputs_dir / "prepared_dataset" / "NCI1.csv",
-                embeddings_stem="nci1",
-            )
+    """El Refractive Index es un valor continuo (regresion); se binariza por
+    la mediana (0 = por debajo, 1 = igual o por encima) para poder usar los
+    pipelines de clasificacion binaria tal cual estan, sin agregarles soporte
+    de regresion. El CSV fuente trae una fila de titulo suelta antes del
+    encabezado real, asi que se busca la fila de encabezado en vez de asumir
+    que es la primera."""
+    source_csv_path = (REPO_ROOT / str(dataset_config["source_csv"])).resolve()
+    if not source_csv_path.exists():
+        raise FileNotFoundError(f"No existe archivo fuente para {dataset_name}: {source_csv_path}")
 
-    prepared_csv = outputs_dir / "prepared_dataset" / "NCI1.csv"
-    _write_nci_rows_to_csv(load_nci=load_nci, prepared_csv=prepared_csv, task_name=task_name)
+    with source_csv_path.open("r", newline="", encoding="utf-8", errors="replace") as handle:
+        raw_rows = list(csv.reader(handle))
+
+    header_index = None
+    for index, row in enumerate(raw_rows):
+        if "Refractive Index" in row and "SMILES" in row:
+            header_index = index
+            break
+    if header_index is None:
+        raise ValueError(f"No encontre el encabezado esperado (Refractive Index, SMILES) en {source_csv_path}")
+
+    header = raw_rows[header_index]
+    parsed_rows: list[dict[str, object]] = []
+    for raw_row in raw_rows[header_index + 1 :]:
+        if not any(cell.strip() for cell in raw_row):
+            continue
+        record = dict(zip(header, raw_row))
+        smiles = (record.get("SMILES") or "").strip()
+        value_text = (record.get("Refractive Index") or "").strip()
+        if not smiles or not value_text:
+            continue
+        try:
+            value = float(value_text)
+        except ValueError:
+            continue
+        parsed_rows.append({"smiles": smiles, "value": value})
+
+    if not parsed_rows:
+        raise ValueError(f"No pude leer filas validas de {source_csv_path}")
+
+    median = _median([row["value"] for row in parsed_rows])
+
+    prepared_dir = outputs_dir / "prepared_dataset"
+    prepared_dir.mkdir(parents=True, exist_ok=True)
+    prepared_csv = prepared_dir / f"{dataset_name}.csv"
+    with prepared_csv.open("w", newline="", encoding="utf-8") as out_handle:
+        writer = csv.DictWriter(out_handle, fieldnames=["id", "smiles", "label", "refractive_index"])
+        writer.writeheader()
+        for index, row in enumerate(parsed_rows):
+            writer.writerow(
+                {
+                    "id": str(index),
+                    "smiles": row["smiles"],
+                    "label": 1 if row["value"] >= median else 0,
+                    "refractive_index": row["value"],
+                }
+            )
 
     return _build_binary_dataset_context(
         dataset_name=dataset_name,
         dataset_config=dataset_config,
         prepared_csv=prepared_csv,
-        embeddings_stem="nci1",
+        embeddings_stem=dataset_name,
     )
 
 
-def _prepare_ptc_fm_csv(
+# Fuente: Palomba, Vazquez & Diaz (2012), "Novel descriptors from main and
+# side chains of high-molecular-weight polymers applied to prediction of
+# glass transition temperatures", J. Mol. Graph. Model. 38, 137-147, Table 1.
+# El repo solo tenia los 88 archivos .mol (trimeros) y el PDF del paper, sin
+# ningun CSV con los valores experimentales Tg/M -- se transcribieron a mano
+# desde la Tabla 1 del PDF (columna "Exp.", en K*mol/g). El indice coincide
+# con el prefijo numerico de cada archivo .mol (ej. "001 trimer poly(ethylene).mol" -> 1).
+_GLASS_TRANSITION_TG_M_BY_INDEX: dict[int, float] = {
+    1: 6.96, 2: 4.07, 3: 2.62, 4: 3.63, 5: 3.30, 6: 5.26, 7: 3.27, 8: 2.51,
+    9: 1.98, 10: 8.14, 11: 5.57, 12: 7.13, 13: 3.50, 14: 3.59, 15: 2.84,
+    16: 2.63, 17: 2.82, 18: 3.47, 19: 3.17, 20: 3.17, 21: 3.11, 22: 5.55,
+    23: 3.14, 24: 3.53, 25: 2.46, 26: 1.71, 27: 1.63, 28: 3.55, 29: 2.64,
+    30: 3.64, 31: 3.47, 32: 3.78, 33: 2.84, 34: 2.55, 35: 2.73, 36: 2.47,
+    37: 2.68, 38: 2.43, 39: 3.22, 40: 7.27, 41: 4.68, 42: 3.36, 43: 2.64,
+    44: 1.80, 45: 1.24, 46: 1.07, 47: 1.59, 48: 2.04, 49: 1.82, 50: 1.33,
+    51: 1.13, 52: 1.28, 53: 1.25, 54: 1.09, 55: 1.38, 56: 2.24, 57: 2.21,
+    58: 2.01, 59: 2.56, 60: 2.53, 61: 2.15, 62: 2.76, 63: 1.87, 64: 2.51,
+    65: 2.28, 66: 4.61, 67: 2.04, 68: 2.32, 69: 1.69, 70: 1.81, 71: 2.64,
+    72: 2.09, 73: 1.58, 74: 3.14, 75: 1.74, 76: 2.06, 77: 2.03, 78: 3.13,
+    79: 3.64, 80: 2.53, 81: 2.39, 82: 3.03, 83: 2.82, 84: 2.32, 85: 2.14,
+    86: 2.81, 87: 3.11, 88: 3.78,
+}
+
+
+def _prepare_glass_transition_csv(
     dataset_name: str,
     dataset_config: dict[str, Any],
     outputs_dir: Path,
 ) -> dict[str, str]:
+    """No hay CSV fuente para este dataset: solo 88 archivos .mol (trimeros)
+    y el paper en PDF. Convierte cada .mol a SMILES con RDKit, le pega el
+    Tg/M experimental (ver _GLASS_TRANSITION_TG_M_BY_INDEX) por el indice
+    numerico del nombre de archivo, y binariza por la mediana."""
     try:
         from rdkit import Chem
     except ImportError as exc:  # pragma: no cover - depende del runtime
         raise ImportError(
-            "PTC_FM necesita RDKit para reconstruir los grafos a SMILES, "
-            "pero RDKit no esta disponible en este entorno."
+            "El dataset de glass transition temperature ratio necesita RDKit "
+            "para convertir los archivos .mol a SMILES, pero RDKit no esta "
+            "disponible en este entorno."
         ) from exc
 
-    source_dir = (REPO_ROOT / str(dataset_config["source_dir"])).resolve()
+    source_dir = (REPO_ROOT / str(dataset_config["source_mol_dir"])).resolve()
     if not source_dir.exists():
-        raise FileNotFoundError(f"No existe la carpeta raw de PTC_FM: {source_dir}")
+        raise FileNotFoundError(f"No existe la carpeta de archivos .mol: {source_dir}")
 
-    graph_indicator = _read_int_lines(source_dir / "PTC_FM_graph_indicator.txt")
-    node_labels = _read_int_lines(source_dir / "PTC_FM_node_labels.txt")
-    graph_labels = _read_int_lines(source_dir / "PTC_FM_graph_labels.txt")
-    edge_labels = _read_int_lines(source_dir / "PTC_FM_edge_labels.txt")
-    adjacency_pairs = _read_edge_pairs(source_dir / "PTC_FM_A.txt")
+    mol_files = sorted(source_dir.glob("*.mol"))
+    if not mol_files:
+        raise FileNotFoundError(f"No encontre archivos .mol en {source_dir}")
 
-    if len(graph_indicator) != len(node_labels):
-        raise ValueError(
-            "PTC_FM inconsistente: graph_indicator y node_labels no tienen el mismo largo."
-        )
-    if len(adjacency_pairs) != len(edge_labels):
-        raise ValueError(
-            "PTC_FM inconsistente: A.txt y edge_labels.txt no tienen el mismo largo."
-        )
+    parsed_rows: list[dict[str, object]] = []
+    skipped = 0
+    for mol_path in mol_files:
+        match = re.match(r"\s*(\d+)", mol_path.stem)
+        if not match:
+            skipped += 1
+            continue
+        index = int(match.group(1))
+        tg_m = _GLASS_TRANSITION_TG_M_BY_INDEX.get(index)
+        if tg_m is None:
+            skipped += 1
+            continue
 
-    nodes_by_graph: dict[int, list[tuple[int, int]]] = defaultdict(list)
-    for global_node_id, (graph_id, node_label) in enumerate(zip(graph_indicator, node_labels), start=1):
-        nodes_by_graph[graph_id].append((global_node_id, node_label))
+        mol = Chem.MolFromMolFile(str(mol_path))
+        if mol is None:
+            skipped += 1
+            continue
+        try:
+            smiles = Chem.MolToSmiles(mol)
+        except Exception:
+            skipped += 1
+            continue
+        if not smiles:
+            skipped += 1
+            continue
 
-    edges_by_graph: dict[int, dict[tuple[int, int], int]] = defaultdict(dict)
-    for (left, right), edge_label in zip(adjacency_pairs, edge_labels):
-        graph_id = graph_indicator[left - 1]
-        if graph_indicator[right - 1] != graph_id:
-            raise ValueError(
-                f"PTC_FM inconsistente: arista entre grafos distintos ({left}, {right})."
-            )
-        edge_key = tuple(sorted((left, right)))
-        edges_by_graph[graph_id].setdefault(edge_key, edge_label)
+        parsed_rows.append({"index": index, "smiles": smiles, "value": tg_m, "name": mol_path.stem})
+
+    if not parsed_rows:
+        raise ValueError(f"No pude convertir ningun archivo .mol a SMILES en {source_dir}")
+
+    median = _median([row["value"] for row in parsed_rows])
+    parsed_rows.sort(key=lambda row: row["index"])
 
     prepared_dir = outputs_dir / "prepared_dataset"
     prepared_dir.mkdir(parents=True, exist_ok=True)
-    prepared_csv = prepared_dir / "PTC_FM.csv"
-
-    invalid_graphs = 0
-    written_rows = 0
-    with prepared_csv.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["id", "smiles", "label"])
+    prepared_csv = prepared_dir / f"{dataset_name}.csv"
+    with prepared_csv.open("w", newline="", encoding="utf-8") as out_handle:
+        writer = csv.DictWriter(out_handle, fieldnames=["id", "smiles", "label", "tg_m_ratio", "polymer_name"])
         writer.writeheader()
-
-        for graph_index, graph_label in enumerate(graph_labels, start=1):
-            mol = Chem.RWMol()
-            global_to_local: dict[int, int] = {}
-
-            for global_node_id, node_label in nodes_by_graph.get(graph_index, []):
-                symbol = PTC_FM_NODE_LABEL_TO_SYMBOL.get(node_label)
-                if symbol is None:
-                    raise ValueError(
-                        f"PTC_FM tiene un node_label desconocido: {node_label} en grafo {graph_index}."
-                    )
-                atom_idx = mol.AddAtom(Chem.Atom(symbol))
-                global_to_local[global_node_id] = atom_idx
-
-            for (left, right), edge_label in edges_by_graph.get(graph_index, {}).items():
-                bond_name = PTC_FM_EDGE_LABEL_TO_BOND.get(edge_label)
-                if bond_name is None:
-                    raise ValueError(
-                        f"PTC_FM tiene un edge_label desconocido: {edge_label} en grafo {graph_index}."
-                    )
-                bond_type = getattr(Chem.rdchem.BondType, bond_name)
-                mol.AddBond(global_to_local[left], global_to_local[right], bond_type)
-                if edge_label == 3:
-                    bond = mol.GetBondBetweenAtoms(global_to_local[left], global_to_local[right])
-                    if bond is not None:
-                        bond.SetIsAromatic(True)
-                    mol.GetAtomWithIdx(global_to_local[left]).SetIsAromatic(True)
-                    mol.GetAtomWithIdx(global_to_local[right]).SetIsAromatic(True)
-
-            final_mol = mol.GetMol()
-            try:
-                Chem.SanitizeMol(final_mol)
-                smiles = Chem.MolToSmiles(final_mol, canonical=True)
-            except Exception:
-                invalid_graphs += 1
-                continue
-
-            if not smiles:
-                invalid_graphs += 1
-                continue
-
+        for row in parsed_rows:
             writer.writerow(
                 {
-                    "id": str(graph_index - 1),
-                    "smiles": smiles,
-                    "label": _normalize_binary_label(graph_label),
+                    "id": str(row["index"]),
+                    "smiles": row["smiles"],
+                    "label": 1 if row["value"] >= median else 0,
+                    "tg_m_ratio": row["value"],
+                    "polymer_name": row["name"],
                 }
             )
-            written_rows += 1
-
-    if written_rows == 0:
-        raise ValueError(
-            "No pude reconstruir ninguna molecula valida para PTC_FM con RDKit."
-        )
 
     return _build_binary_dataset_context(
         dataset_name=dataset_name,
         dataset_config=dataset_config,
         prepared_csv=prepared_csv,
-        embeddings_stem="ptc_fm",
+        embeddings_stem=dataset_name,
     )
 
 
@@ -358,148 +433,10 @@ def _build_binary_dataset_context(
             "molehd_dataset_path": container_prepared_path,
             "graphhd_dataset_path": container_prepared_path,
             "polymer_gnn_dataset_path": container_prepared_path,
+            "graph_dataset_path": "",
         }
     )
     return context
-
-
-def _prepare_nci_csv_with_docker(outputs_dir: Path, task_name: str | None) -> None:
-    image_name = "final-nci-dataset-prep"
-    dockerfile = REPO_ROOT / "final" / "nci_dataset_prep_docker" / "Dockerfile"
-    build_context = (REPO_ROOT / "final").resolve()
-    prepared_dir = outputs_dir / "prepared_dataset"
-    prepared_dir.mkdir(parents=True, exist_ok=True)
-
-    inspect = subprocess.run(
-        ["docker", "image", "inspect", image_name],
-        capture_output=True,
-        text=True,
-    )
-    if inspect.returncode != 0:
-        subprocess.run(
-            [
-                "docker",
-                "build",
-                "--platform",
-                "linux/amd64",
-                "-t",
-                image_name,
-                "-f",
-                str(dockerfile.resolve()),
-                str(build_context),
-            ],
-            check=True,
-        )
-
-    env = dict(os.environ)
-    env.setdefault("DOCKER_DEFAULT_PLATFORM", "linux/amd64")
-    subprocess.run(
-        [
-            "docker",
-            "run",
-            "--rm",
-            "--platform",
-            "linux/amd64",
-            "-e",
-            "PYTHONUNBUFFERED=1",
-            "-e",
-            "PYTHONIOENCODING=utf-8",
-            "-v",
-            f"{prepared_dir.resolve()}:/run_outputs/prepared_dataset",
-            image_name,
-            "python",
-            "/opt/nci_prep/prepare_nci_dataset.py",
-            "--output-csv",
-            "/run_outputs/prepared_dataset/NCI1.csv",
-            *([] if not task_name else ["--task-name", task_name]),
-        ],
-        check=True,
-        env=env,
-    )
-
-
-def _select_nci_task_index(tasks: list[str], task_name: str | None) -> int:
-    if not tasks:
-        raise ValueError("DeepChem no devolvio tareas para NCI/NCL1.")
-    if task_name is None:
-        return 0
-    try:
-        return tasks.index(task_name)
-    except ValueError as exc:
-        raise ValueError(
-            f"La tarea pedida para NCI/NCL1 no existe: {task_name!r}. "
-            f"Primeras tareas disponibles: {tasks[:5]!r}"
-        ) from exc
-
-
-def _write_nci_rows_to_csv(*, load_nci: Any, prepared_csv: Path, task_name: str | None) -> None:
-    tasks, datasets, _transformers = load_nci(featurizer="Raw", splitter=None)
-    if not datasets:
-        raise ValueError("DeepChem no devolvio datasets para NCI1.")
-    task_index = _select_nci_task_index(list(tasks), task_name)
-
-    prepared_csv.parent.mkdir(parents=True, exist_ok=True)
-    seen_ids: set[str] = set()
-    written_rows = 0
-    invalid_rows = 0
-    observed_labels: set[int] = set()
-
-    with prepared_csv.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["id", "smiles", "label"])
-        writer.writeheader()
-
-        for split_index, dataset in enumerate(datasets):
-            ids = list(getattr(dataset, "ids", []))
-            labels = getattr(dataset, "y", None)
-            if labels is None:
-                raise ValueError("DeepChem devolvio un dataset sin etiquetas en .y.")
-
-            if len(ids) != len(labels):
-                raise ValueError(
-                    f"DeepChem devolvio ids y labels con distinto largo en split {split_index}: "
-                    f"{len(ids)} vs {len(labels)}."
-                )
-
-            for row_index, (row_id, raw_label) in enumerate(zip(ids, labels)):
-                smiles = str(row_id).strip()
-                if not smiles:
-                    invalid_rows += 1
-                    continue
-
-                flattened = _flatten_label_value(raw_label[task_index])
-                if flattened is None:
-                    invalid_rows += 1
-                    continue
-
-                if math.isnan(flattened):
-                    invalid_rows += 1
-                    continue
-                normalized = _normalize_binary_label(flattened)
-                observed_labels.add(normalized)
-                unique_id = f"{split_index}_{row_index}"
-                if unique_id in seen_ids:
-                    continue
-                seen_ids.add(unique_id)
-
-                writer.writerow(
-                    {
-                        "id": unique_id,
-                        "smiles": smiles,
-                        "label": normalized,
-                    }
-                )
-                written_rows += 1
-
-    if written_rows == 0:
-        raise ValueError(
-            "No pude generar filas validas para NCI1 desde DeepChem. "
-            f"Filas invalidas descartadas: {invalid_rows}"
-        )
-    if observed_labels != {0, 1}:
-        raise ValueError(
-            "NCI/NCL1 no termino teniendo las dos clases binarias esperadas "
-            f"despues de normalizar labels: {sorted(observed_labels)!r}"
-        )
 
 
 def _read_int_lines(path: Path) -> list[int]:
@@ -525,25 +462,6 @@ def _read_edge_pairs(path: Path) -> list[tuple[int, int]]:
         left, right = [piece.strip() for piece in line.split(",", maxsplit=1)]
         pairs.append((int(left), int(right)))
     return pairs
-
-
-def _flatten_label_value(value: Any) -> float | None:
-    current = value
-    while isinstance(current, (list, tuple)) and current:
-        current = current[0]
-
-    shape = getattr(current, "shape", None)
-    if shape is not None:
-        size = getattr(current, "size", None)
-        if size == 0:
-            return None
-        if hasattr(current, "reshape"):
-            current = current.reshape(-1)[0]
-
-    try:
-        return float(current)
-    except (TypeError, ValueError):
-        return None
 
 
 def _normalize_binary_label(value: float | int) -> int:

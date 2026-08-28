@@ -2,144 +2,142 @@
   "datasets": {
     "bbbp": {
       "description": "BBBP binario usado por Random Forest, Mole-BERT, Mol2Vec JL y MoleHD.",
-      "dataset_path": "/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP.csv",
-      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP_rdkit_valid.csv",
-      "labels_csv": "/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP.csv",
+      "dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/bbbp/raw/BBBP.csv",
+      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/smiles/bbbp/raw/BBBP_rdkit_valid.csv",
+      "labels_csv": "/tesis/Tesis-PolymerHDC/data/smiles/bbbp/raw/BBBP.csv",
       "embeddings_csv": "/run_outputs/artifacts/bbbp_mol2vec_features.csv",
-      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP.csv",
-      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP_rdkit_valid.csv",
-      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/bbbp/raw/BBBP.csv",
-      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP.csv",
-      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/bbbp/raw/BBBP.csv",
+      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/bbbp/raw/BBBP.csv",
+      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/smiles/bbbp/raw/BBBP_rdkit_valid.csv",
+      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/smiles/bbbp/raw/BBBP.csv",
+      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/bbbp/raw/BBBP.csv",
+      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/bbbp/raw/BBBP.csv",
       "id_column": "num",
       "target_column": "p_np",
       "molecule_column": "smiles"
     },
     "bace": {
       "description": "BACE binario estandarizado desde el raw de Mole-BERT, con SMILES en columna unica y target Class.",
-      "dataset_path": "/tesis/Tesis-PolymerHDC/data/bace/raw/bace_binary.csv",
-      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/bace/raw/bace_binary.csv",
-      "labels_csv": "/tesis/Tesis-PolymerHDC/data/bace/raw/bace_binary.csv",
+      "dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/bace/raw/bace_binary.csv",
+      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/smiles/bace/raw/bace_binary.csv",
+      "labels_csv": "/tesis/Tesis-PolymerHDC/data/smiles/bace/raw/bace_binary.csv",
       "embeddings_csv": "/run_outputs/artifacts/bace_mol2vec_features.csv",
-      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/bace/raw/bace_binary.csv",
-      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/bace/raw/bace_binary.csv",
-      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/bace/raw/bace_binary.csv",
-      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/bace/raw/bace_binary.csv",
-      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/bace/raw/bace_binary.csv",
+      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/bace/raw/bace_binary.csv",
+      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/smiles/bace/raw/bace_binary.csv",
+      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/smiles/bace/raw/bace_binary.csv",
+      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/bace/raw/bace_binary.csv",
+      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/bace/raw/bace_binary.csv",
       "id_column": "id",
       "target_column": "label",
       "molecule_column": "smiles"
     },
     "clintox": {
       "description": "ClinTox preparado como tarea binaria unica usando CT_TOX por defecto. Tambien deje FDA_APPROVED en raw/single_task/.",
-      "dataset_path": "/tesis/Tesis-PolymerHDC/data/clintox/raw/single_task/ct_tox_binary.csv",
-      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/clintox/raw/single_task/ct_tox_binary.csv",
-      "labels_csv": "/tesis/Tesis-PolymerHDC/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/clintox/raw/single_task/ct_tox_binary.csv",
+      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/smiles/clintox/raw/single_task/ct_tox_binary.csv",
+      "labels_csv": "/tesis/Tesis-PolymerHDC/data/smiles/clintox/raw/single_task/ct_tox_binary.csv",
       "embeddings_csv": "/run_outputs/artifacts/clintox_mol2vec_features.csv",
-      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/clintox/raw/single_task/ct_tox_binary.csv",
-      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/clintox/raw/single_task/ct_tox_binary.csv",
-      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/clintox/raw/single_task/ct_tox_binary.csv",
-      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/clintox/raw/single_task/ct_tox_binary.csv",
-      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/clintox/raw/single_task/ct_tox_binary.csv",
+      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/clintox/raw/single_task/ct_tox_binary.csv",
+      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/smiles/clintox/raw/single_task/ct_tox_binary.csv",
+      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/smiles/clintox/raw/single_task/ct_tox_binary.csv",
+      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/clintox/raw/single_task/ct_tox_binary.csv",
+      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/clintox/raw/single_task/ct_tox_binary.csv",
       "id_column": "id",
       "target_column": "label",
       "molecule_column": "smiles"
     },
     "hiv": {
       "description": "HIV binario estandarizado desde el raw de Mole-BERT, usando HIV_active como target.",
-      "dataset_path": "/tesis/Tesis-PolymerHDC/data/hiv/raw/hiv_binary.csv",
-      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/hiv/raw/hiv_binary.csv",
-      "labels_csv": "/tesis/Tesis-PolymerHDC/data/hiv/raw/hiv_binary.csv",
+      "dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/hiv/raw/hiv_binary.csv",
+      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/smiles/hiv/raw/hiv_binary.csv",
+      "labels_csv": "/tesis/Tesis-PolymerHDC/data/smiles/hiv/raw/hiv_binary.csv",
       "embeddings_csv": "/run_outputs/artifacts/hiv_mol2vec_features.csv",
-      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/hiv/raw/hiv_binary.csv",
-      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/hiv/raw/hiv_binary.csv",
-      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/hiv/raw/hiv_binary.csv",
-      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/hiv/raw/hiv_binary.csv",
-      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/hiv/raw/hiv_binary.csv",
+      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/hiv/raw/hiv_binary.csv",
+      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/smiles/hiv/raw/hiv_binary.csv",
+      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/smiles/hiv/raw/hiv_binary.csv",
+      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/hiv/raw/hiv_binary.csv",
+      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/hiv/raw/hiv_binary.csv",
       "id_column": "id",
       "target_column": "label",
       "molecule_column": "smiles"
     },
     "mutag": {
-      "description": "MUTAG binario preparado automaticamente desde los archivos raw de Mole-BERT.",
-      "adapter": "mutag_raw_pair_to_csv",
-      "source_smiles_path": "Tesis-PolymerHDC/data/mutag/raw/mutag_188_data.can",
-      "source_labels_path": "Tesis-PolymerHDC/data/mutag/raw/mutag_188_target.txt",
+      "description": "MUTAG (TU Dataset): benchmark real de clasificacion de grafos, grafo autentico (nodos/aristas categoricos) sin pasar nunca por SMILES/RDKit. Solo lo corren los pipelines de grafos (graphHD, polymer_gnn_bbbp).",
+      "adapter": "tu_dataset_graph",
+      "source_dir": "Tesis-PolymerHDC/data/graph/mutag/raw",
       "target_column": "label",
       "molecule_column": "smiles",
       "id_column": "id"
     },
     "nci1": {
-      "description": "Proxy tabular con SMILES armado desde NCI60 en DeepChem, fijando una sola tarea binaria para poder correr pipelines tipo BBBP.",
-      "adapter": "deepchem_nci_to_csv",
-      "task_name": "CCRF-CEM",
-      "target_column": "label",
-      "molecule_column": "smiles",
-      "id_column": "id"
-    },
-    "ncl1": {
-      "description": "Alias practico del mismo proxy basado en NCI60/DeepChem, no del benchmark grafico TU NCI1.",
-      "adapter": "deepchem_nci_to_csv",
-      "task_name": "CCRF-CEM",
+      "description": "NCI1 (TU Dataset): benchmark real de clasificacion de grafos, grafo autentico (nodos/aristas categoricos) sin pasar nunca por SMILES/RDKit. Solo lo corren los pipelines de grafos (graphHD, polymer_gnn_bbbp).",
+      "adapter": "tu_dataset_graph",
+      "source_dir": "Tesis-PolymerHDC/data/graph/nci1/raw",
       "target_column": "label",
       "molecule_column": "smiles",
       "id_column": "id"
     },
     "ptc_fm": {
-      "description": "PTC_FM binario reconstruido a SMILES con RDKit desde los archivos raw de TU Dataset.",
-      "adapter": "ptc_fm_raw_to_csv",
-      "source_dir": "Tesis-PolymerHDC/data/ptc_fm",
+      "description": "PTC_FM (TU Dataset): benchmark real de clasificacion de grafos, grafo autentico (nodos/aristas categoricos) sin pasar nunca por SMILES/RDKit. Solo lo corren los pipelines de grafos (graphHD, polymer_gnn_bbbp).",
+      "adapter": "tu_dataset_graph",
+      "source_dir": "Tesis-PolymerHDC/data/graph/ptc_fm/raw",
       "target_column": "label",
       "molecule_column": "smiles",
       "id_column": "id"
     },
     "sider": {
       "description": "SIDER preparado como tarea binaria unica usando Hepatobiliary disorders por defecto. Tambien deje las 27 tareas en raw/single_task/.",
-      "dataset_path": "/tesis/Tesis-PolymerHDC/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
-      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
-      "labels_csv": "/tesis/Tesis-PolymerHDC/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/smiles/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "labels_csv": "/tesis/Tesis-PolymerHDC/data/smiles/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
       "embeddings_csv": "/run_outputs/artifacts/sider_mol2vec_features.csv",
-      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
-      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
-      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
-      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
-      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/smiles/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/smiles/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
+      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/smiles/sider/raw/single_task/hepatobiliary_disorders_binary.csv",
       "id_column": "id",
       "target_column": "label",
       "molecule_column": "smiles"
     },
-    "tox21": {
-      "description": "Tox21 preparado como tarea binaria unica usando NR-AhR por defecto. Tambien deje las 12 tareas en raw/single_task/.",
-      "dataset_path": "/tesis/Tesis-PolymerHDC/data/tox21/raw/single_task/nr_ahr_binary.csv",
-      "rdkit_valid_csv": "/tesis/Tesis-PolymerHDC/data/tox21/raw/single_task/nr_ahr_binary.csv",
-      "labels_csv": "/tesis/Tesis-PolymerHDC/data/tox21/raw/single_task/nr_ahr_binary.csv",
-      "embeddings_csv": "/run_outputs/artifacts/tox21_mol2vec_features.csv",
-      "rf_dataset_path": "/tesis/Tesis-PolymerHDC/data/tox21/raw/single_task/nr_ahr_binary.csv",
-      "molebert_input_csv": "/tesis/Tesis-PolymerHDC/data/tox21/raw/single_task/nr_ahr_binary.csv",
-      "molehd_dataset_path": "/repo/Tesis-PolymerHDC/data/tox21/raw/single_task/nr_ahr_binary.csv",
-      "graphhd_dataset_path": "/tesis/Tesis-PolymerHDC/data/tox21/raw/single_task/nr_ahr_binary.csv",
-      "polymer_gnn_dataset_path": "/tesis/Tesis-PolymerHDC/data/tox21/raw/single_task/nr_ahr_binary.csv",
-      "id_column": "id",
+    "refractive_index": {
+      "description": "Indice de refraccion de 227 polimeros (regresion), binarizado por la mediana para poder usar los pipelines de clasificacion binaria tal cual estan. El valor continuo original queda disponible en la columna 'refractive_index' para el pipeline de regresion lineal.",
+      "adapter": "refractive_index_binarize",
+      "source_csv": "Tesis-PolymerHDC/data/smiles/refractive_index/dataset.csv",
       "target_column": "label",
-      "molecule_column": "smiles"
+      "regression_target_column": "refractive_index",
+      "molecule_column": "smiles",
+      "id_column": "id"
     },
-    "vipea": {
-      "description": "Dataset vipea para el baseline GNN de polimeros.",
-      "csv_path": "/tesis/Tesis-PolymerHDC/data/vipea/dataset.csv"
+    "glass_transition_ratio": {
+      "description": "Ratio Tg/M (glass transition temperature sobre peso molecular) de 88 polimeros (regresion), reconstruido desde los 88 archivos .mol (trimeros) + Tabla 1 de Palomba et al. 2012, binarizado por la mediana. El valor continuo original queda disponible en la columna 'tg_m_ratio' para el pipeline de regresion lineal.",
+      "adapter": "glass_transition_mol_to_csv",
+      "source_mol_dir": "Tesis-PolymerHDC/data/smiles/glass_transition_ratio/Archivos .mol",
+      "target_column": "label",
+      "regression_target_column": "tg_m_ratio",
+      "molecule_column": "smiles",
+      "id_column": "id"
     }
   },
   "methods": [
     {
       "name": "random_forest_rdkit",
       "description": "Random Forest con descriptores RDKit sobre datasets binarios tipo BBBP/MUTAG.",
-      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
-      "cwd": "Tesis-PolymerHDC/src/random_forest_rdkit",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/smiles_pipelines/random_forest_rdkit",
       "docker": {
         "image": "general-random-forest-rdkit",
-        "build_context": "Tesis-PolymerHDC/src/random_forest_rdkit",
-        "dockerfile": "Tesis-PolymerHDC/src/random_forest_rdkit/runtime/Dockerfile",
+        "build_context": "Tesis-PolymerHDC/src/smiles_pipelines/random_forest_rdkit",
+        "dockerfile": "Tesis-PolymerHDC/src/smiles_pipelines/random_forest_rdkit/runtime/Dockerfile",
         "platform": "linux/amd64",
-        "workdir": "/tesis/Tesis-PolymerHDC/src/random_forest_rdkit",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/random_forest_rdkit",
         "mounts": [
           {
             "source": "{repo_root}",
@@ -159,8 +157,16 @@
           "{molecule_column}",
           "--iterations",
           "100",
+          "--random-state",
+          "800",
           "--output-dir",
-          "/run_outputs/artifacts"
+          "/run_outputs/artifacts",
+          "--frac-a-column",
+          "{frac_a_column}",
+          "--frac-b-column",
+          "{frac_b_column}",
+          "--group-column",
+          "{group_column}"
         ]
       },
       "summary_patterns": [
@@ -169,16 +175,84 @@
       ]
     },
     {
+      "name": "hdbind",
+      "description": "HDBind (LLNL): fingerprints ECFP proyectados a hipervectores hiperdimensionales via proyeccion aleatoria fija, clasificados con memoria asociativa + reentrenamiento tipo perceptron y similitud coseno.",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/smiles_pipelines/hdbind",
+      "docker": {
+        "image": "general-hdbind",
+        "build_context": "Tesis-PolymerHDC/src/smiles_pipelines/hdbind",
+        "dockerfile": "Tesis-PolymerHDC/src/smiles_pipelines/hdbind/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/hdbind",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "--dataset",
+          "{rf_dataset_path}",
+          "--target-column",
+          "{target_column}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--id-column",
+          "{id_column}",
+          "--iterations",
+          "100",
+          "--dim",
+          "10048",
+          "--random-state",
+          "800",
+          "--output-dir",
+          "/run_outputs/artifacts",
+          "--frac-a-column",
+          "{frac_a_column}",
+          "--frac-b-column",
+          "{frac_b_column}",
+          "--group-column",
+          "{group_column}"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/*_hdbind_metrics.json",
+        "_outputs/artifacts/*_hdbind_detailed_results.csv",
+        "_outputs/artifacts/*_hdbind_best_iteration_predictions.csv"
+      ]
+    },
+    {
       "name": "mole_bert_hdc",
       "description": "Pipeline completo Mole-BERT -> JL -> HDC sobre BBBP.",
-      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
-      "cwd": "Tesis-PolymerHDC/src/mole_bert_hdc",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc",
       "docker": {
         "image": "general-molebert-hdc",
-        "build_context": "Tesis-PolymerHDC/src/mole_bert_hdc",
-        "dockerfile": "Tesis-PolymerHDC/src/mole_bert_hdc/hdc_pipeline/Dockerfile",
+        "build_context": "Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc",
+        "dockerfile": "Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc/hdc_pipeline/Dockerfile",
         "platform": "linux/amd64",
-        "workdir": "/tesis/Tesis-PolymerHDC/src/mole_bert_hdc",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc",
         "mounts": [
           {
             "source": "{repo_root}",
@@ -199,13 +273,23 @@
           "--smiles-column",
           "{molecule_column}",
           "--checkpoint",
-          "/tesis/Tesis-PolymerHDC/src/mole_bert_hdc/original/model_gin/Mole-BERT.pth",
+          "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc/original/model_gin/Mole-BERT.pth",
           "--iterations",
           "100",
+          "--random-state",
+          "800",
           "--jl-dim",
           "10048",
           "--output-dir",
-          "/run_outputs/artifacts"
+          "/run_outputs/artifacts",
+          "--frac-a-column",
+          "{frac_a_column}",
+          "--frac-b-column",
+          "{frac_b_column}",
+          "--group-column",
+          "{group_column}",
+          "--n-jobs",
+          "{n_jobs_mole_bert_hdc}"
         ]
       },
       "summary_patterns": [
@@ -214,16 +298,24 @@
       ]
     },
     {
-      "name": "mol2vec_jl",
-      "description": "Embeddings Mol2Vec + JL + clasificador, usando embeddings prearmados o generados en runtime segun el dataset.",
-      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
-      "cwd": "Tesis-PolymerHDC/src/mol2vec_jl",
+      "name": "mole_bert_rf",
+      "description": "Variante de mole_bert_hdc: mismos embeddings Mole-BERT, pero sin JL ni conversion a HDC -- se entrena un RandomForestClassifier directo sobre el embedding de 300 dimensiones.",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc",
       "docker": {
-        "image": "general-mol2vec-jl",
-        "build_context": "Tesis-PolymerHDC/src/mol2vec_jl",
-        "dockerfile": "Tesis-PolymerHDC/src/mol2vec_jl/runtime/Dockerfile",
+        "image": "general-molebert-hdc",
+        "build_context": "Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc",
+        "dockerfile": "Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc/hdc_pipeline/Dockerfile",
         "platform": "linux/amd64",
-        "workdir": "/tesis/Tesis-PolymerHDC/src/mol2vec_jl",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc",
         "mounts": [
           {
             "source": "{repo_root}",
@@ -236,7 +328,68 @@
         ],
         "run_args": [
           "python",
-          "/tesis/Tesis-PolymerHDC/src/mol2vec_jl/jl_pipeline/run_bbbp_jl_pipeline.py",
+          "rf_pipeline/run_rf_pipeline.py",
+          "--input-csv",
+          "{molebert_input_csv}",
+          "--target-column",
+          "{target_column}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--checkpoint",
+          "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/mole_bert_hdc/original/model_gin/Mole-BERT.pth",
+          "--n-estimators",
+          "300",
+          "--iterations",
+          "100",
+          "--random-state",
+          "800",
+          "--output-dir",
+          "/run_outputs/artifacts",
+          "--frac-a-column",
+          "{frac_a_column}",
+          "--frac-b-column",
+          "{frac_b_column}",
+          "--group-column",
+          "{group_column}"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/*_rf_metrics.json",
+        "_outputs/artifacts/*_rf_test_predictions.csv"
+      ]
+    },
+    {
+      "name": "mol2vec_jl",
+      "description": "Embeddings Mol2Vec + JL + clasificador, usando embeddings prearmados o generados en runtime segun el dataset.",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/smiles_pipelines/mol2vec_jl",
+      "docker": {
+        "image": "general-mol2vec-jl",
+        "build_context": "Tesis-PolymerHDC/src/smiles_pipelines/mol2vec_jl",
+        "dockerfile": "Tesis-PolymerHDC/src/smiles_pipelines/mol2vec_jl/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/mol2vec_jl",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "python",
+          "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/mol2vec_jl/jl_pipeline/run_bbbp_jl_pipeline.py",
           "--embeddings-csv",
           "{embeddings_csv}",
           "--labels-csv",
@@ -254,7 +407,15 @@
           "--output-dir",
           "/run_outputs/artifacts",
           "--random-state",
-          "800"
+          "800",
+          "--frac-a-column",
+          "{frac_a_column}",
+          "--frac-b-column",
+          "{frac_b_column}",
+          "--group-column",
+          "{group_column}",
+          "--n-jobs",
+          "{n_jobs_mol2vec_jl}"
         ]
       },
       "summary_patterns": [
@@ -265,13 +426,21 @@
     {
       "name": "molehd",
       "description": "MoleHD clasico sobre BBBP, ejecutado en copia temporal para no contaminar outputs.",
-      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
-      "workspace_copy_from": "Tesis-PolymerHDC/src/molehd",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "workspace_copy_from": "Tesis-PolymerHDC/src/smiles_pipelines/molehd",
       "cwd_in_workspace": ".",
       "docker": {
         "image": "general-molehd",
-        "build_context": "Tesis-PolymerHDC/src/molehd",
-        "dockerfile": "Tesis-PolymerHDC/src/molehd/runtime/Dockerfile",
+        "build_context": "Tesis-PolymerHDC/src/smiles_pipelines/molehd",
+        "dockerfile": "Tesis-PolymerHDC/src/smiles_pipelines/molehd/runtime/Dockerfile",
         "platform": "linux/amd64",
         "workdir": "/tesis",
         "mounts": [
@@ -322,10 +491,17 @@
           "--split_type",
           "random_stratified",
           "--version",
-          "general_run"
+          "general_run",
+          "--frac_a_column",
+          "{frac_a_column}",
+          "--frac_b_column",
+          "{frac_b_column}",
+          "--group_column",
+          "{group_column}"
         ]
       },
       "summary_patterns": [
+        "_workspace/outputs/metrics_*.json",
         "_workspace/outputs/metrics_dict_*.p",
         "_workspace/outputs/detailed_results_*.csv"
       ]
@@ -333,14 +509,25 @@
     {
       "name": "graphHD",
       "description": "Variante separada de GraphHD basada mas directamente en la carpeta original graph-hd, mantenida aparte para comparar contra la adaptacion actual.",
-      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
-      "cwd": "Tesis-PolymerHDC/src/graphHD",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "mutag",
+        "nci1",
+        "ptc_fm",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/graph_pipelines/graphHD",
       "docker": {
         "image": "final-graphhd",
-        "build_context": "Tesis-PolymerHDC/src/graphHD",
-        "dockerfile": "Tesis-PolymerHDC/src/graphHD/runtime/Dockerfile",
+        "build_context": "Tesis-PolymerHDC/src/graph_pipelines/graphHD",
+        "dockerfile": "Tesis-PolymerHDC/src/graph_pipelines/graphHD/runtime/Dockerfile",
         "platform": "linux/amd64",
-        "workdir": "/tesis/Tesis-PolymerHDC/src/graphHD",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/graph_pipelines/graphHD",
         "mounts": [
           {
             "source": "{repo_root}",
@@ -353,7 +540,7 @@
         ],
         "run_args": [
           "python",
-          "/tesis/Tesis-PolymerHDC/src/graphHD/pipeline/run_graphHD_remaster.py",
+          "/tesis/Tesis-PolymerHDC/src/graph_pipelines/graphHD/pipeline/run_graphHD_remaster.py",
           "--dataset-csv",
           "{graphhd_dataset_path}",
           "--target-column",
@@ -369,7 +556,9 @@
           "--output-dir",
           "/run_outputs/artifacts",
           "--random-state",
-          "800"
+          "800",
+          "--tu-graph-npz",
+          "{graph_dataset_path}"
         ]
       },
       "summary_patterns": [
@@ -379,56 +568,30 @@
       ]
     },
     {
-      "name": "polymer_gnn",
-      "description": "Baseline GNN repetido sobre vipea usando PyTorch Geometric.",
-      "datasets": ["vipea"],
-      "cwd": "Tesis-PolymerHDC/src/polymer_gnn",
-      "docker": {
-        "image": "general-polymer-gnn",
-        "build_context": "Tesis-PolymerHDC/src/polymer_gnn",
-        "dockerfile": "Tesis-PolymerHDC/src/polymer_gnn/runtime/Dockerfile",
-        "platform": "linux/amd64",
-        "workdir": "/tesis/Tesis-PolymerHDC/src/polymer_gnn",
-        "mounts": [
-          {
-            "source": "{repo_root}",
-            "target": "/tesis"
-          },
-          {
-            "source": "{run_output_dir}",
-            "target": "/run_outputs"
-          }
-        ],
-        "run_args": [
-          "python",
-          "original/run_gnn.py",
-          "--task",
-          "vipea",
-          "--csv-path",
-          "{csv_path}",
-          "--iterations",
-          "100",
-          "--output-dir",
-          "/run_outputs/artifacts"
-        ]
-      },
-      "summary_patterns": [
-        "_outputs/artifacts/vipea_polymer_gnn_metrics.json",
-        "_outputs/artifacts/vipea_polymer_gnn_detailed_results.csv"
-      ]
-    },
-    {
       "name": "polymer_gnn_bbbp",
-      "aliases": ["polymer_gnn"],
+      "aliases": [
+        "polymer_gnn"
+      ],
       "description": "La misma arquitectura GNN del repo polymer-gnn-classification, adaptada a datasets binarios tipo BBBP/MUTAG.",
-      "datasets": ["bbbp", "bace", "clintox", "hiv", "mutag", "nci1", "ncl1", "ptc_fm", "sider", "tox21"],
-      "cwd": "Tesis-PolymerHDC/src/polymer_gnn",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "mutag",
+        "nci1",
+        "ptc_fm",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/graph_pipelines/polymer_gnn",
       "docker": {
         "image": "general-polymer-gnn",
-        "build_context": "Tesis-PolymerHDC/src/polymer_gnn",
-        "dockerfile": "Tesis-PolymerHDC/src/polymer_gnn/runtime/Dockerfile",
+        "build_context": "Tesis-PolymerHDC/src/graph_pipelines/polymer_gnn",
+        "dockerfile": "Tesis-PolymerHDC/src/graph_pipelines/polymer_gnn/runtime/Dockerfile",
         "platform": "linux/amd64",
-        "workdir": "/tesis/Tesis-PolymerHDC/src/polymer_gnn",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/graph_pipelines/polymer_gnn",
         "mounts": [
           {
             "source": "{repo_root}",
@@ -442,8 +605,6 @@
         "run_args": [
           "python",
           "original/run_gnn.py",
-          "--task",
-          "binary",
           "--dataset-csv",
           "{polymer_gnn_dataset_path}",
           "--smiles-column",
@@ -460,14 +621,183 @@
           "8",
           "--iterations",
           "100",
+          "--random-state",
+          "800",
           "--output-dir",
-          "/run_outputs/artifacts"
+          "/run_outputs/artifacts",
+          "--tu-graph-npz",
+          "{graph_dataset_path}"
         ]
       },
       "summary_patterns": [
         "_outputs/artifacts/*_polymer_gnn_metrics.json",
         "_outputs/artifacts/*_polymer_gnn_detailed_results.csv",
         "_outputs/artifacts/*_polymer_gnn_best_iteration_predictions.csv"
+      ]
+    },
+    {
+      "name": "logistic_regression_rdkit",
+      "description": "Regresion Logistica con descriptores RDKit sobre datasets binarios tipo BBBP/MUTAG.",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/smiles_pipelines/logistic_regression_rdkit",
+      "docker": {
+        "image": "general-logistic-regression-rdkit",
+        "build_context": "Tesis-PolymerHDC/src/smiles_pipelines/logistic_regression_rdkit",
+        "dockerfile": "Tesis-PolymerHDC/src/smiles_pipelines/logistic_regression_rdkit/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/logistic_regression_rdkit",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "--dataset",
+          "{rf_dataset_path}",
+          "--target-column",
+          "{target_column}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--iterations",
+          "100",
+          "--random-state",
+          "800",
+          "--output-dir",
+          "/run_outputs/artifacts",
+          "--frac-a-column",
+          "{frac_a_column}",
+          "--frac-b-column",
+          "{frac_b_column}",
+          "--group-column",
+          "{group_column}"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/metrics.json",
+        "_outputs/artifacts/detailed_results.csv"
+      ]
+    },
+    {
+      "name": "nn_classifier_rdkit",
+      "description": "Red neuronal (MLPClassifier) con descriptores RDKit sobre datasets binarios tipo BBBP/MUTAG.",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/smiles_pipelines/nn_classifier_rdkit",
+      "docker": {
+        "image": "general-nn-classifier-rdkit",
+        "build_context": "Tesis-PolymerHDC/src/smiles_pipelines/nn_classifier_rdkit",
+        "dockerfile": "Tesis-PolymerHDC/src/smiles_pipelines/nn_classifier_rdkit/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/nn_classifier_rdkit",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "--dataset",
+          "{rf_dataset_path}",
+          "--target-column",
+          "{target_column}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--iterations",
+          "100",
+          "--random-state",
+          "800",
+          "--output-dir",
+          "/run_outputs/artifacts",
+          "--frac-a-column",
+          "{frac_a_column}",
+          "--frac-b-column",
+          "{frac_b_column}",
+          "--group-column",
+          "{group_column}"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/metrics.json",
+        "_outputs/artifacts/detailed_results.csv"
+      ]
+    },
+    {
+      "name": "dummy_classifier",
+      "description": "Baseline dummy (sklearn DummyClassifier, most_frequent) que ignora las moleculas por completo: sirve de piso de comparacion para los datasets binarios/multiclase tipo BBBP/MUTAG.",
+      "datasets": [
+        "bbbp",
+        "bace",
+        "clintox",
+        "hiv",
+        "sider",
+        "refractive_index",
+        "glass_transition_ratio"
+      ],
+      "cwd": "Tesis-PolymerHDC/src/smiles_pipelines/dummy_classifier",
+      "docker": {
+        "image": "general-dummy-classifier",
+        "build_context": "Tesis-PolymerHDC/src/smiles_pipelines/dummy_classifier",
+        "dockerfile": "Tesis-PolymerHDC/src/smiles_pipelines/dummy_classifier/runtime/Dockerfile",
+        "platform": "linux/amd64",
+        "workdir": "/tesis/Tesis-PolymerHDC/src/smiles_pipelines/dummy_classifier",
+        "mounts": [
+          {
+            "source": "{repo_root}",
+            "target": "/tesis"
+          },
+          {
+            "source": "{run_output_dir}",
+            "target": "/run_outputs"
+          }
+        ],
+        "run_args": [
+          "--dataset",
+          "{rf_dataset_path}",
+          "--target-column",
+          "{target_column}",
+          "--smiles-column",
+          "{molecule_column}",
+          "--iterations",
+          "100",
+          "--random-state",
+          "800",
+          "--output-dir",
+          "/run_outputs/artifacts",
+          "--frac-a-column",
+          "{frac_a_column}",
+          "--frac-b-column",
+          "{frac_b_column}",
+          "--group-column",
+          "{group_column}"
+        ]
+      },
+      "summary_patterns": [
+        "_outputs/artifacts/metrics.json",
+        "_outputs/artifacts/detailed_results.csv"
       ]
     }
   ]

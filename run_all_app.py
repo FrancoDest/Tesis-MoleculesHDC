@@ -8,7 +8,6 @@ import pickle
 import re
 import shutil
 import subprocess
-import traceback
 from pathlib import Path
 from typing import Any
 
@@ -19,7 +18,6 @@ from catalog_config import (
     join_command,
     list_options,
     load_catalog,
-    make_run_id,
     prepare_isolated_env,
     resolve_python,
     select_methods,
@@ -60,7 +58,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dataset",
         default=DEFAULT_DATASET,
-        help=f"Dataset a usar segun el catalogo, o 'all' para correr todos secuencialmente. Default: {DEFAULT_DATASET}.",
+        help=f"Dataset a usar segun el catalogo. Default: {DEFAULT_DATASET}.",
     )
     parser.add_argument(
         "--method",
@@ -143,7 +141,7 @@ def summarize_json_metrics(path: Path) -> list[dict[str, Any]]:
     with path.open("r", encoding="utf-8") as handle:
         payload = json.load(handle)
 
-    row: dict[str, Any] = {"summary_source": str(path), "summary_format": "json"}
+    row: dict[str, Any] = {"summary_format": "json"}
     interesting_keys = (
         "pipeline",
         "dataset_path",
@@ -190,7 +188,7 @@ def summarize_pickle_metrics(path: Path) -> list[dict[str, Any]]:
     with path.open("rb") as handle:
         payload = pickle.load(handle)
 
-    row: dict[str, Any] = {"summary_source": str(path), "summary_format": "pickle"}
+    row: dict[str, Any] = {"summary_format": "pickle"}
     for key in ("target", "config", "binarization", "threshold"):
         if key in payload:
             row[key] = payload[key]
@@ -275,7 +273,6 @@ def summarize_csv_artifact(path: Path) -> list[dict[str, Any]]:
                     continue
                 counts[column] += 1
     row = {
-        "summary_source": str(path),
         "summary_format": "csv",
         "csv_row_count": row_count,
         "csv_columns": json.dumps(fieldnames, ensure_ascii=False),
@@ -296,7 +293,7 @@ def summarize_artifact(path: Path) -> list[dict[str, Any]]:
         return summarize_pickle_metrics(path)
     if suffix == ".csv":
         return summarize_csv_artifact(path)
-    return [{"summary_source": str(path), "summary_format": "unknown"}]
+    return [{"summary_format": "unknown"}]
 
 
 def parse_metrics_from_log(stdout_text: str) -> dict[str, Any]:
@@ -329,15 +326,13 @@ def build_base_row(
     cwd: Path,
     run_log_path: Path,
 ) -> dict[str, Any]:
+    del command, cwd, run_log_path
     return {
         "method_name": method_name,
         "dataset_name": dataset_name,
         "run_id": run_id,
         "status": status,
         "exit_code": exit_code,
-        "cwd": str(cwd),
-        "command": json.dumps(command, ensure_ascii=False),
-        "run_log": str(run_log_path),
     }
 
 
@@ -365,34 +360,36 @@ def collect_summary_rows(
         run_log_path=run_log_path,
     )
 
-    rows: list[dict[str, Any]] = []
-    seen_files: set[Path] = set()
+    # Una sola fila por corrida: se toma el primer patron (en el orden del
+    # catalogo) que efectivamente matchee un archivo. El catalogo ya los
+    # ordena de mas completo a menos completo (metrics.json/pickle primero,
+    # CSVs de detalle despues), asi que no hace falta combinar varios
+    # artefactos ni repetir la misma fila base por cada uno.
     for pattern in summary_patterns:
-        for resolved_path in sorted(run_dir.glob(pattern)):
-            if resolved_path in seen_files or not resolved_path.is_file():
-                continue
-            seen_files.add(resolved_path)
-            try:
-                artifact_rows = summarize_artifact(resolved_path)
-            except ModuleNotFoundError as exc:
-                artifact_rows = [
-                    {
-                        "summary_source": str(resolved_path),
-                        "summary_format": resolved_path.suffix.lower().lstrip(".") or "unknown",
-                        "summary_error": f"missing_python_module:{exc.name}",
-                    }
-                ]
-            for summary_row in artifact_rows:
-                merged = dict(base_row)
-                merged.update(summary_row)
-                rows.append(merged)
+        matches = sorted(path for path in run_dir.glob(pattern) if path.is_file())
+        if not matches:
+            continue
+        resolved_path = matches[0]
+        try:
+            artifact_rows = summarize_artifact(resolved_path)
+        except ModuleNotFoundError as exc:
+            artifact_rows = [
+                {
+                    "summary_format": resolved_path.suffix.lower().lstrip(".") or "unknown",
+                    "summary_error": f"missing_python_module:{exc.name}",
+                }
+            ]
+        if not artifact_rows:
+            artifact_rows = [{}]
+        # Normalmente el artefacto da 1 sola fila (corrida single-task). En
+        # multi-tarea, summarize_json_metrics/summarize_pickle_metrics
+        # devuelven 1 fila por tarea -- hay que conservarlas todas, si no
+        # se pierden 11 de las 12 tareas quedandose solo con la primera.
+        return [{**base_row, **summary_row} for summary_row in artifact_rows]
 
-    if not rows:
-        merged = dict(base_row)
-        merged.update(parse_metrics_from_log(run_log_text))
-        rows.append(merged)
-
-    return rows
+    merged = dict(base_row)
+    merged.update(parse_metrics_from_log(run_log_text))
+    return [merged]
 
 
 def rewrite_csv(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -482,6 +479,8 @@ def run_method(
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             bufsize=1,
         )
 
@@ -526,29 +525,6 @@ def cleanup_run_directory(execution: dict) -> None:
         shutil.rmtree(workspace_root, ignore_errors=True)
 
 
-def resolve_requested_datasets(catalog: dict[str, Any], dataset_arg: str) -> list[str]:
-    if dataset_arg == "all":
-        return list(catalog["datasets"].keys())
-
-    if dataset_arg not in catalog["datasets"]:
-        raise SystemExit(f"Dataset desconocido: {dataset_arg}")
-    return [dataset_arg]
-
-
-def build_failed_summary_row(method_name: str, dataset_name: str, error: Exception) -> dict[str, Any]:
-    return {
-        "method_name": method_name,
-        "dataset_name": dataset_name,
-        "run_id": make_run_id(),
-        "status": "failed",
-        "exit_code": None,
-        "cwd": "",
-        "command": "",
-        "run_log": "",
-        "summary_error": f"{type(error).__name__}: {error}",
-    }
-
-
 def main() -> int:
     args = parse_args()
     _ = resolve_python(args.python)
@@ -561,39 +537,35 @@ def main() -> int:
     results_dir = args.results_dir.resolve()
     results_dir.mkdir(parents=True, exist_ok=True)
 
+    dataset_name = args.dataset
+    dataset_config = catalog["datasets"].get(dataset_name)
+    if dataset_config is None:
+        raise SystemExit(f"Dataset desconocido: {dataset_name}")
+
+    methods = select_methods(catalog, dataset_name, args.method)
+    methods, skipped_methods = filter_methods_inside_final(methods)
+
+    print(f"Dataset: {dataset_name}")
+    print(f"Metodos a correr: {', '.join(method['name'] for method in methods)}")
+    for method_name, missing_path in skipped_methods:
+        print(f"[skip] {method_name}: no existe {missing_path}")
+
     exit_code = 0
-    for dataset_name in resolve_requested_datasets(catalog, args.dataset):
-        dataset_config = catalog["datasets"][dataset_name]
-        methods = select_methods(catalog, dataset_name, args.method)
-        methods, skipped_methods = filter_methods_inside_final(methods)
-
+    for method_config in methods:
         print()
-        print(f"Dataset: {dataset_name}")
-        print(f"Metodos a correr: {', '.join(method['name'] for method in methods)}")
-        for method_name, missing_path in skipped_methods:
-            print(f"[skip] {method_name}: no existe {missing_path}")
-
-        for method_config in methods:
-            print()
-            print(f"=== Ejecutando {method_config['name']} sobre {dataset_name} ===")
-            try:
-                summary_rows = run_method(
-                    method_config=method_config,
-                    dataset_name=dataset_name,
-                    dataset_config=dataset_config,
-                    results_dir=results_dir,
-                    rebuild=args.rebuild,
-                    dry_run=args.dry_run,
-                )
-            except Exception as exc:
-                print(f"[error] {method_config['name']} sobre {dataset_name}: {exc}")
-                print(traceback.format_exc())
-                summary_rows = [build_failed_summary_row(method_config["name"], dataset_name, exc)]
-
-            method_slug = method_config["name"]
-            append_rows(results_dir / method_slug / "summary.csv", summary_rows)
-            if any(row.get("status") == "failed" for row in summary_rows):
-                exit_code = 1
+        print(f"=== Ejecutando {method_config['name']} sobre {dataset_name} ===")
+        summary_rows = run_method(
+            method_config=method_config,
+            dataset_name=dataset_name,
+            dataset_config=dataset_config,
+            results_dir=results_dir,
+            rebuild=args.rebuild,
+            dry_run=args.dry_run,
+        )
+        method_slug = method_config["name"]
+        append_rows(results_dir / method_slug / "summary.csv", summary_rows)
+        if any(row.get("status") == "failed" for row in summary_rows):
+            exit_code = 1
 
     update_global_index(results_dir)
     return exit_code

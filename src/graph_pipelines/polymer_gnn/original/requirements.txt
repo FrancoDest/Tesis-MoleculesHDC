@@ -1,0 +1,4 @@
+torch>=2.2
+torch-geometric>=2.5
+rdkit>=2023.9
+

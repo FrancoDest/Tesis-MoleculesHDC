@@ -12,6 +12,7 @@ DEFAULT_ALL_RUNS_CSV = FINAL_DIR / "results" / "all_runs.csv"
 DEFAULT_OUTPUT_DIR = FINAL_DIR / "results" / "average_comparisons"
 
 METHOD_LABELS = {
+    "dummy_classifier": "Dummy Baseline",
     "random_forest_rdkit": "Random Forest RDKit",
     "mole_bert_hdc": "Mole-BERT HDC",
     "mol2vec_jl": "Mol2Vec JL",
