@@ -141,7 +141,7 @@ def summarize_json_metrics(path: Path) -> list[dict[str, Any]]:
     with path.open("r", encoding="utf-8") as handle:
         payload = json.load(handle)
 
-    row: dict[str, Any] = {"summary_source": str(path), "summary_format": "json"}
+    row: dict[str, Any] = {"summary_format": "json"}
     interesting_keys = (
         "pipeline",
         "dataset_path",
@@ -188,7 +188,7 @@ def summarize_pickle_metrics(path: Path) -> list[dict[str, Any]]:
     with path.open("rb") as handle:
         payload = pickle.load(handle)
 
-    row: dict[str, Any] = {"summary_source": str(path), "summary_format": "pickle"}
+    row: dict[str, Any] = {"summary_format": "pickle"}
     for key in ("target", "config", "binarization", "threshold"):
         if key in payload:
             row[key] = payload[key]
@@ -273,7 +273,6 @@ def summarize_csv_artifact(path: Path) -> list[dict[str, Any]]:
                     continue
                 counts[column] += 1
     row = {
-        "summary_source": str(path),
         "summary_format": "csv",
         "csv_row_count": row_count,
         "csv_columns": json.dumps(fieldnames, ensure_ascii=False),
@@ -294,7 +293,7 @@ def summarize_artifact(path: Path) -> list[dict[str, Any]]:
         return summarize_pickle_metrics(path)
     if suffix == ".csv":
         return summarize_csv_artifact(path)
-    return [{"summary_source": str(path), "summary_format": "unknown"}]
+    return [{"summary_format": "unknown"}]
 
 
 def parse_metrics_from_log(stdout_text: str) -> dict[str, Any]:
@@ -327,15 +326,13 @@ def build_base_row(
     cwd: Path,
     run_log_path: Path,
 ) -> dict[str, Any]:
+    del command, cwd, run_log_path
     return {
         "method_name": method_name,
         "dataset_name": dataset_name,
         "run_id": run_id,
         "status": status,
         "exit_code": exit_code,
-        "cwd": str(cwd),
-        "command": json.dumps(command, ensure_ascii=False),
-        "run_log": str(run_log_path),
     }
 
 
@@ -363,34 +360,36 @@ def collect_summary_rows(
         run_log_path=run_log_path,
     )
 
-    rows: list[dict[str, Any]] = []
-    seen_files: set[Path] = set()
+    # Una sola fila por corrida: se toma el primer patron (en el orden del
+    # catalogo) que efectivamente matchee un archivo. El catalogo ya los
+    # ordena de mas completo a menos completo (metrics.json/pickle primero,
+    # CSVs de detalle despues), asi que no hace falta combinar varios
+    # artefactos ni repetir la misma fila base por cada uno.
     for pattern in summary_patterns:
-        for resolved_path in sorted(run_dir.glob(pattern)):
-            if resolved_path in seen_files or not resolved_path.is_file():
-                continue
-            seen_files.add(resolved_path)
-            try:
-                artifact_rows = summarize_artifact(resolved_path)
-            except ModuleNotFoundError as exc:
-                artifact_rows = [
-                    {
-                        "summary_source": str(resolved_path),
-                        "summary_format": resolved_path.suffix.lower().lstrip(".") or "unknown",
-                        "summary_error": f"missing_python_module:{exc.name}",
-                    }
-                ]
-            for summary_row in artifact_rows:
-                merged = dict(base_row)
-                merged.update(summary_row)
-                rows.append(merged)
+        matches = sorted(path for path in run_dir.glob(pattern) if path.is_file())
+        if not matches:
+            continue
+        resolved_path = matches[0]
+        try:
+            artifact_rows = summarize_artifact(resolved_path)
+        except ModuleNotFoundError as exc:
+            artifact_rows = [
+                {
+                    "summary_format": resolved_path.suffix.lower().lstrip(".") or "unknown",
+                    "summary_error": f"missing_python_module:{exc.name}",
+                }
+            ]
+        if not artifact_rows:
+            artifact_rows = [{}]
+        # Normalmente el artefacto da 1 sola fila (corrida single-task). En
+        # multi-tarea, summarize_json_metrics/summarize_pickle_metrics
+        # devuelven 1 fila por tarea -- hay que conservarlas todas, si no
+        # se pierden 11 de las 12 tareas quedandose solo con la primera.
+        return [{**base_row, **summary_row} for summary_row in artifact_rows]
 
-    if not rows:
-        merged = dict(base_row)
-        merged.update(parse_metrics_from_log(run_log_text))
-        rows.append(merged)
-
-    return rows
+    merged = dict(base_row)
+    merged.update(parse_metrics_from_log(run_log_text))
+    return [merged]
 
 
 def rewrite_csv(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -480,6 +479,8 @@ def run_method(
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             bufsize=1,
         )
 
